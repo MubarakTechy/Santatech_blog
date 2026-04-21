@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sign Up | Create Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a1429 0%, #0f1e3c 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* subtle animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at 30% 40%, rgba(238, 242, 251, 0.02) 0%, rgba(15, 30, 60, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* main card container - fully responsive with overflow protection */
+        .signup-container {
+            width: 100%;
+            max-width: 500px;
+            background: #eef2fb;
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            z-index: 2;
+            margin: 0.5rem;
+        }
+
+        .signup-container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 32px 50px -18px rgba(0, 0, 0, 0.45);
+        }
+
+        /* header with primary color #0f1e3c */
+        .card-header {
+            background: #0f1e3c;
+            padding: 1.8rem 1.5rem 1.2rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(238, 242, 251, 0.12);
+        }
+
+        .brand-icon {
+            background: rgba(238, 242, 251, 0.12);
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .brand-icon i {
+            font-size: 2rem;
+            color: #eef2fb;
+        }
+
+        .card-header h2 {
+            color: #eef2fb;
+            font-weight: 600;
+            font-size: 1.6rem;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.2rem;
+            word-break: break-word;
+        }
+
+        .card-header p {
+            color: rgba(238, 242, 251, 0.75);
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        /* form body with overflow protection */
+        .card-body {
+            padding: 1.8rem 1.5rem 1.8rem 1.5rem;
+            background: #eef2fb;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* custom scrollbar for better UX */
+        .card-body::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .card-body::-webkit-scrollbar-track {
+            background: #dce3f0;
+            border-radius: 10px;
+        }
+
+        .card-body::-webkit-scrollbar-thumb {
+            background: #0f1e3c;
+            border-radius: 10px;
+        }
+
+        /* error message styling */
+        .error-message {
+            background: rgba(220, 53, 69, 0.08);
+            border-left: 4px solid #dc3545;
+            color: #a71d2a;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.85rem 1rem;
+            border-radius: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            word-break: break-word;
+        }
+
+        .error-message i {
+            font-size: 1.1rem;
+            color: #dc3545;
+            flex-shrink: 0;
+        }
+
+        /* form groups - responsive */
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #0f1e3c;
+            letter-spacing: -0.2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            color: #5c6f8f;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.8rem;
+            font-size: 0.95rem;
+            font-family: 'Inter', monospace;
+            border: 1.5px solid #dce3f0;
+            background: #ffffff;
+            border-radius: 1.2rem;
+            outline: none;
+            transition: all 0.2s ease;
+            color: #0f1e3c;
+            font-weight: 500;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #0f1e3c;
+            box-shadow: 0 0 0 4px rgba(15, 30, 60, 0.12);
+        }
+
+        .input-wrapper input::placeholder {
+            color: #9aaec9;
+            font-weight: 400;
+            font-size: 0.85rem;
+        }
+
+        /* password toggle button */
+        .toggle-password {
+            position: absolute;
+            right: 0.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #5c6f8f;
+            font-size: 0.95rem;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+            z-index: 2;
+        }
+
+        .toggle-password:hover {
+            color: #0f1e3c;
+        }
+
+        /* sign up button */
+        .signup-btn {
+            background: #0f1e3c;
+            color: #eef2fb;
+            width: 100%;
+            padding: 0.85rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 1.5rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-top: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.2px;
+            box-shadow: 0 4px 8px rgba(15, 30, 60, 0.2);
+        }
+
+        .signup-btn i {
+            font-size: 0.95rem;
+            transition: transform 0.2s;
+        }
+
+        .signup-btn:hover {
+            background: #122b50;
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(15, 30, 60, 0.3);
+        }
+
+        .signup-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* login link */
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(15, 30, 60, 0.08);
+        }
+
+        .login-link a {
+            color: #0f1e3c;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .login-link a i {
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+
+        .login-link a:hover {
+            color: #1e3a6b;
+            text-decoration: underline;
+        }
+
+        .login-link a:hover i {
+            transform: translateX(-4px);
+        }
+
+        /* responsive breakpoints */
+        @media (max-width: 640px) {
+            body {
+                padding: 0.75rem;
+                align-items: flex-start;
+                padding-top: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+            
+            .signup-container {
+                max-width: 100%;
+                border-radius: 1.5rem;
+                margin: 0;
+            }
+            
+            .card-header {
+                padding: 1.4rem 1.2rem 1rem 1.2rem;
+            }
+            
+            .brand-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .brand-icon i {
+                font-size: 1.7rem;
+            }
+            
+            .card-header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .card-header p {
+                font-size: 0.8rem;
+            }
+            
+            .card-body {
+                padding: 1.4rem 1.2rem 1.4rem 1.2rem;
+                max-height: calc(100vh - 180px);
+            }
+            
+            .form-group {
+                margin-bottom: 1.1rem;
+            }
+            
+            .input-wrapper input {
+                padding: 0.75rem 1rem 0.75rem 2.6rem;
+                font-size: 0.9rem;
+            }
+            
+            .input-wrapper i {
+                left: 0.85rem;
+                font-size: 0.9rem;
+            }
+            
+            .signup-btn {
+                padding: 0.75rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+            
+            .card-body {
+                padding: 1.2rem 1rem 1.2rem 1rem;
+            }
+            
+            .form-group label {
+                font-size: 0.75rem;
+            }
+            
+            .input-wrapper input {
+                padding: 0.7rem 0.8rem 0.7rem 2.4rem;
+                font-size: 0.85rem;
+            }
+            
+            .input-wrapper i {
+                left: 0.75rem;
+                font-size: 0.85rem;
+            }
+            
+            .toggle-password {
+                right: 0.5rem;
+            }
+            
+            .error-message {
+                font-size: 0.75rem;
+                padding: 0.7rem 0.9rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .card-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .signup-btn {
+                font-size: 0.85rem;
+                padding: 0.7rem;
+            }
+            
+            .login-link a {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* landscape mode support */
+        @media (max-height: 600px) and (orientation: landscape) {
+            body {
+                align-items: flex-start;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+            
+            .signup-container {
+                max-width: 480px;
+            }
+            
+            .card-body {
+                max-height: 60vh;
+            }
+            
+            .card-header {
+                padding: 1rem 1.2rem 0.8rem 1.2rem;
+            }
+            
+            .brand-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .brand-icon i {
+                font-size: 1.4rem;
+            }
+            
+            .card-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .form-group {
+                margin-bottom: 0.8rem;
+            }
+        }
+
+        /* accessibility focus */
+        input:focus-visible, button:focus-visible {
+            outline: 2px solid #0f1e3c;
+            outline-offset: 2px;
+        }
+
+        /* prevent overflow on all elements */
+        img, svg, iframe {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="signup-container">
+    <div class="card-header">
+        <div class="brand-icon">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        <h2>Create account</h2>
+        <p>Join us and get started</p>
+    </div>
+
+    <div class="card-body">
+        <!-- Django error display area - styled and responsive -->
+        <div id="error-container" style="display: none;" class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="error-text"></span>
+        </div>
+
+        <!-- Django form with CSRF token - matches original structure exactly -->
+        <form method="POST" id="signup-form" action="">
+            {% csrf_token %}
+            
+            <!-- Username field -->
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user" style="margin-right: 4px;"></i> Username</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user-circle"></i>
+                    <input type="text" id="username" name="username" placeholder="johndoe" required autocomplete="username">
+                </div>
+            </div>
+            
+            <!-- Email field -->
+            <div class="form-group">
+                <label for="email"><i class="far fa-envelope" style="margin-right: 4px;"></i> Email</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="hello@example.com" required autocomplete="email">
+                </div>
+            </div>
+            
+            <!-- Password field with toggle visibility -->
+            <div class="form-group">
+                <label for="password"><i class="fas fa-key" style="margin-right: 4px;"></i> Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="new-password">
+                    <button type="button" class="toggle-password" id="togglePasswordBtn" aria-label="Show password">
+                        <i class="far fa-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <button type="submit" class="signup-btn">
+                <i class="fas fa-arrow-right-to-bracket"></i> Sign Up
+            </button>
+        </form>
+        
+        <!-- Login link with Django url reverse -->
+        <div class="login-link">
+            <a href="{% url 'login' %}">
+                <i class="fas fa-sign-in-alt"></i> Already have an account? Login
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden element to capture Django error variable - fully compatible with backend -->
+<span id="raw-error-value" style="display: none;">{{ error }}</span>
+
+<script>
+    (function() {
+        // Password visibility toggle functionality
+        const toggleBtn = document.getElementById('togglePasswordBtn');
+        const passwordInput = document.getElementById('password');
+        
+        if (toggleBtn && passwordInput) {
+            toggleBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                const icon = toggleBtn.querySelector('i');
+                if (icon) {
+                    if (type === 'text') {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    } else {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    }
+                }
+            });
+        }
+        
+        // Display Django error message if exists
+        const rawErrorSpan = document.getElementById('raw-error-value');
+        const errorContainer = document.getElementById('error-container');
+        const errorTextSpan = document.getElementById('error-text');
+        
+        if (rawErrorSpan && errorContainer && errorTextSpan) {
+            let errorMsg = rawErrorSpan.innerHTML ? rawErrorSpan.innerHTML.trim() : '';
+            // Check if error message is not empty and not the string "None"
+            if (errorMsg && errorMsg !== '' && errorMsg !== 'None') {
+                errorTextSpan.innerText = errorMsg;
+                errorContainer.style.display = 'flex';
+            } else {
+                errorContainer.style.display = 'none';
+            }
+        }
+        
+        // Ensure no overflow issues on dynamic content
+        const checkOverflow = function() {
+            const bodyElement = document.querySelector('.card-body');
+            if (bodyElement && bodyElement.scrollHeight > bodyElement.clientHeight) {
+                // scrollbar already visible via CSS, just ensure padding
+                bodyElement.style.paddingRight = '12px';
+            } else if (bodyElement) {
+                bodyElement.style.paddingRight = '1.5rem';
+            }
+        };
+        
+        // Run after a short delay to account for any dynamic changes
+        setTimeout(checkOverflow, 100);
+        window.addEventListener('resize', checkOverflow);
+    })();
+</script>
+
+</body>
+</html>

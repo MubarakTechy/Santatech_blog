@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Horizon Portal | Secure Login</title>
+    <!-- Google Fonts for clean typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (free icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a1429 0%, #0f1e3c 100%);
+            /* height: 100vh; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        /* subtle animated background ornament */
+        body::before {
+            content: '';
+            /* position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%; */
+            padding-top: 20%;
+            background: radial-gradient(circle at 30% 40%, rgba(238, 242, 251, 0.02) 0%, rgba(15, 30, 60, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* main card container */
+        .login-container {
+            width: 100%;
+            max-width: 460px;
+            background: #eef2fb;
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(0px);
+        }
+
+        .login-container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 32px 50px -18px rgba(0, 0, 0, 0.45);
+        }
+
+        /* header / brand area with primary color */
+        .card-header {
+            background: #0f1e3c;
+            padding: 2rem 2rem 1.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(238, 242, 251, 0.12);
+        }
+
+        .brand-icon {
+            background: rgba(238, 242, 251, 0.12);
+            width: 64px;
+            height: 64px;
+            border-radius: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(2px);
+        }
+
+        .brand-icon i {
+            font-size: 2.2rem;
+            color: #eef2fb;
+        }
+
+        .card-header h2 {
+            color: #eef2fb;
+            font-weight: 600;
+            font-size: 1.85rem;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-header p {
+            color: rgba(238, 242, 251, 0.75);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        /* main form area */
+        .card-body {
+            padding: 2rem 2rem 1.8rem 2rem;
+            background: #eef2fb;
+        }
+
+        /* error message styling */
+        .error-message {
+            background: rgba(220, 53, 69, 0.08);
+            border-left: 4px solid #dc3545;
+            color: #a71d2a;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.85rem 1rem;
+            border-radius: 0.9rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            backdrop-filter: blur(2px);
+        }
+
+        .error-message i {
+            font-size: 1.1rem;
+            color: #dc3545;
+        }
+
+        /* form group styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #0f1e3c;
+            letter-spacing: -0.2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            color: #5c6f8f;
+            font-size: 1rem;
+            transition: color 0.2s;
+            pointer-events: none;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 2.8rem;
+            font-size: 1rem;
+            font-family: 'Inter', monospace;
+            border: 1.5px solid #dce3f0;
+            background: #ffffff;
+            border-radius: 1.2rem;
+            outline: none;
+            transition: all 0.2s ease;
+            color: #0f1e3c;
+            font-weight: 500;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #0f1e3c;
+            box-shadow: 0 0 0 4px rgba(15, 30, 60, 0.12);
+        }
+
+        .input-wrapper input::placeholder {
+            color: #9aaec9;
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+
+        /* password toggle button (modern) */
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #5c6f8f;
+            font-size: 1rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: #0f1e3c;
+        }
+
+        /* login button */
+        .login-btn {
+            background: #0f1e3c;
+            color: #eef2fb;
+            width: 100%;
+            padding: 0.9rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 1.5rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.2px;
+            box-shadow: 0 4px 8px rgba(15, 30, 60, 0.2);
+        }
+
+        .login-btn i {
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            background: #122b50;
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(15, 30, 60, 0.3);
+        }
+
+        .login-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* signup link area */
+        .signup-link {
+            text-align: center;
+            margin-top: 1.8rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(15, 30, 60, 0.08);
+        }
+
+        .signup-link a {
+            color: #0f1e3c;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .signup-link a i {
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+
+        .signup-link a:hover {
+            color: #1e3a6b;
+            text-decoration: underline;
+        }
+
+        .signup-link a:hover i {
+            transform: translateX(4px);
+        }
+
+        /* subtle extra info */
+        .demo-note {
+            background: rgba(15, 30, 60, 0.04);
+            border-radius: 1rem;
+            padding: 0.7rem;
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.7rem;
+            color: #2c3f66;
+            font-weight: 500;
+        }
+
+        /* responsive adjustments */
+        @media (max-width: 500px) {
+            .login-container {
+                max-width: 100%;
+                border-radius: 1.5rem;
+            }
+            .card-body {
+                padding: 1.5rem;
+            }
+            .card-header {
+                padding: 1.5rem 1.5rem 1rem 1.5rem;
+            }
+            .input-wrapper input {
+                padding: 0.8rem 1rem 0.8rem 2.6rem;
+            }
+        }
+
+        /* custom focus ring accessibility */
+        input:focus-visible, button:focus-visible {
+            outline: 2px solid #0f1e3c;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="card-header">
+        <div class="brand-icon">
+            <i class="fas fa-lock"></i>
+        </div>
+        <h2>Welcome back</h2>
+        <p>Sign in to your account</p>
+    </div>
+
+    <div class="card-body">
+        <!-- Django style error display with modern design -->
+        
+        <!-- We simulate Django error context: If 'error' variable exists, show error block -->
+        <div id="error-container" style="display: none;" class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="error-text"></span>
+        </div>
+
+        <!-- The form uses POST method and csrf token exactly as Django expects -->
+        <form method="POST" id="login-form" action="">
+            {% csrf_token %}
+            <!-- Email field with icon -->
+            <div class="form-group">
+                <label for="email"><i class="far fa-envelope" style="margin-right: 6px;"></i> Email address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="hello@example.com" required autocomplete="email">
+                </div>
+            </div>
+
+            <!-- Password field with toggle visibility -->
+            <div class="form-group">
+                <label for="password"><i class="fas fa-key" style="margin-right: 6px;"></i> Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                    <button type="button" class="toggle-password" id="togglePasswordBtn" aria-label="Show password">
+                        <i class="far fa-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn">
+                <i class="fas fa-arrow-right-to-bracket"></i> Login
+            </button>
+        </form>
+
+        <!-- Signup link with Django url reverse -->
+        <div class="signup-link">
+            <a href="{% url 'signup' %}">
+                <i class="fas fa-user-plus"></i> Don't have an account? Sign Up
+            </a>
+        </div>
+
+        <!-- subtle demo note - only design context, not interfering -->
+        <div class="demo-note">
+            <i class="fas fa-shield-alt"></i> Secure login • Protected workspace
+        </div>
+    </div>
+</div>
+
+<!-- 
+    This template fully respects Django backend:
+    - CSRF token present
+    - POST method to same URL (or default action)
+    - error handling: displays {{ error }} if provided from Django view
+    - signup link uses {% url 'signup' %} 
+    Additionally, we add client-side password toggle for better UX (doesn't conflict).
+    We also add a dynamic JS to mirror Django error if exists from template variable.
+-->
+
+<script>
+    (function() {
+        // ========== PASSWORD TOGGLE VISIBILITY ==========
+        const toggleBtn = document.getElementById('togglePasswordBtn');
+        const passwordInput = document.getElementById('password');
+        
+        if (toggleBtn && passwordInput) {
+            toggleBtn.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                const icon = toggleBtn.querySelector('i');
+                if (icon) {
+                    if (type === 'text') {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    } else {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    }
+                }
+            });
+        }
+        
+        
+       
+    })();
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+       
+        
+        let errorContainer = document.getElementById('error-container');
+        let errorTextSpan = document.getElementById('error-text');
+        
+              let rawErrorSpan = document.getElementById('raw-error-value');
+        if (!rawErrorSpan) {
+           
+            const hiddenSpan = document.createElement('span');
+            hiddenSpan.id = 'raw-error-value';
+            hiddenSpan.style.display = 'none';
+            // Django will replace this with error message if exists.
+            hiddenSpan.innerHTML = '{{ error }}';
+            document.body.appendChild(hiddenSpan);
+            rawErrorSpan = hiddenSpan;
+        }
+        
+        // After having rawErrorSpan, extract its content (trimmed)
+        let errorMsg = rawErrorSpan ? rawErrorSpan.innerHTML.trim() : '';
+        // Also check if errorMsg is not empty and not equal to "None" or empty string.
+        if (errorMsg && errorMsg !== '' && errorMsg !== 'None') {
+            if (errorContainer && errorTextSpan) {
+                errorTextSpan.innerText = errorMsg;
+                errorContainer.style.display = 'flex';
+            } else {
+                // fallback: alert or console, but we prefer design consistency.
+                const bodyCard = document.querySelector('.card-body');
+                if (bodyCard && !document.querySelector('.fallback-error')) {
+                    const fallbackDiv = document.createElement('div');
+                    fallbackDiv.className = 'error-message';
+                    fallbackDiv.style.marginBottom = '1rem';
+                    fallbackDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i><span>${escapeHtml(errorMsg)}</span>`;
+                    const formElem = document.getElementById('login-form');
+                    if (formElem) {
+                        formElem.insertBefore(fallbackDiv, formElem.firstChild);
+                    }
+                }
+            }
+        } else {
+            // ensure error container hidden if no error
+            if (errorContainer) errorContainer.style.display = 'none';
+        }
+        
+        // Helper to avoid XSS if error contains HTML (though Django escapes by default)
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
+            });
+        }
+        
+      
+        const toggleBtnInner = document.getElementById('togglePasswordBtn');
+        const passwordField = document.getElementById('password');
+        if (toggleBtnInner && passwordField && !toggleBtnInner.hasListener) {
+            const newToggle = toggleBtnInner.cloneNode(true);
+            toggleBtnInner.parentNode.replaceChild(newToggle, toggleBtnInner);
+            newToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                const icon = newToggle.querySelector('i');
+                if (icon) {
+                    if (type === 'text') {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    } else {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    }
+                }
+            });
+            newToggle.hasListener = true;
+        }
+    });
+</script>
+
+<!-- The hidden raw error capture element is placed to hold the Django error variable correctly -->
+<span id="raw-error-value" style="display: none;">{{ error }}</span>
+<!-- Additionally, we make sure that the error container will be shown/handled properly by above script.
+     The container is initially hidden but gets displayed if error content exists. -->
+</body>
+</html>
