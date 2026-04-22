@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>New Post — SantaTech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #0f1e3c;
+            --navy-mid: #1a3060;
+            --navy-light: #243d72;
+            --navy-soft: #2e4d8a;
+            --navy-pale: #dce6f5;
+            --navy-ghost: #eef2fb;
+            --gold: #c9a84c;
+            --ink: #0d1b36;
+            --ink-mid: #2c3e6b;
+            --ink-soft: #5a6e9c;
+            --ink-muted: #8fa0c0;
+            --paper: #f7f9fc;
+            --paper-warm: #f0f4fa;
+            --paper-mid: #dce5f0;
+            --white: #ffffff;
+            --serif: 'Playfair Display', Georgia, serif;
+            --sans: 'DM Sans', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--sans);
+            font-weight: 400;
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 260px;
+            background: var(--navy);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .brand {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--white);
+            padding: 1.8rem 1.5rem;
+            display: block;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand span { color: var(--gold); }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1.5rem;
+            color: var(--ink-muted);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-nav li a:hover,
+        .sidebar-nav li a.active {
+            background: var(--navy-mid);
+            color: var(--white);
+            border-left: 3px solid var(--gold);
+        }
+
+        .sidebar-nav li a i {
+            width: 20px;
+            font-size: 1rem;
+        }
+
+        .sidebar-bottom {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--navy-soft);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            color: var(--white);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            color: var(--ink-muted);
+            font-size: 0.7rem;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ink-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logout-link:hover { color: #f87171; }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            background: var(--navy);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 98;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            margin-left: 260px;
+            padding: 2rem;
+            max-width: calc(100% - 260px);
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .page-subtitle {
+            color: var(--ink-muted);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .cancel-link {
+            color: var(--ink-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .cancel-link:hover {
+            background: var(--paper-warm);
+            color: var(--navy);
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--white);
+            border-radius: 20px;
+            border: 1px solid var(--paper-mid);
+            overflow: hidden;
+        }
+
+        .form-section {
+            padding: 1.8rem;
+            border-bottom: 1px solid var(--paper-warm);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--ink-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Title Input */
+        .title-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-family: var(--serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--ink);
+            background: transparent;
+        }
+
+        .title-input::placeholder {
+            color: var(--paper-deep, #c5d3e8);
+        }
+
+        .char-counter {
+            font-size: 0.7rem;
+            color: var(--ink-muted);
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+
+        /* Content Textarea */
+        .content-textarea {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-family: var(--sans);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--ink-mid);
+            background: transparent;
+            resize: vertical;
+            min-height: 300px;
+        }
+
+        .content-textarea::placeholder {
+            color: var(--ink-muted);
+            font-style: italic;
+        }
+
+        /* Image Upload */
+        .upload-zone {
+            border: 2px dashed var(--paper-mid);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--paper-warm);
+        }
+
+        .upload-zone:hover {
+            border-color: var(--navy);
+            background: var(--navy-ghost);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: var(--ink-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-text {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+        }
+
+        .upload-sub {
+            font-size: 0.7rem;
+            color: var(--ink-muted);
+            margin-top: 0.3rem;
+        }
+
+        .image-preview {
+            display: none;
+            margin-top: 1rem;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .image-preview img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        /* Form Footer */
+        .form-footer {
+            padding: 1.2rem 1.8rem;
+            background: var(--paper-warm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-hint {
+            font-size: 0.75rem;
+            color: var(--ink-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .publish-btn {
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .publish-btn:hover {
+            background: var(--navy-mid);
+        }
+
+        /* Messages */
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-left: 3px solid #c62828;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            aside {
+                transform: translateX(-100%);
+            }
+            aside.open {
+                transform: translateX(0);
+            }
+            .mobile-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .overlay.open {
+                display: block;
+            }
+            main {
+                margin-left: 0;
+                padding: 1rem;
+                max-width: 100%;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .title-input {
+                font-size: 1.3rem;
+            }
+            .form-section {
+                padding: 1.2rem;
+            }
+            .form-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .publish-btn {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .content-textarea {
+                min-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile Header -->
+<div class="mobile-header">
+    <a href="/" style="color: white; text-decoration: none; font-family: var(--serif); font-style: italic;">
+        Santa & <span style="color: var(--gold);">Tech </span>
+    </a>
+    <button class="menu-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <a href="/" class="brand">Santa & <span>Tech</span></a>
+        <ul class="sidebar-nav">
+            <li><a href="{% url 'dashboard' %}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="#" class="active"><i class="fas fa-plus-circle"></i> New Post</a></li>
+            <li><a href="{% url 'my_post' %}"><i class="fas fa-book"></i> My Posts</a></li>
+            <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+        <div class="sidebar-bottom">
+            <div class="user-info">
+                <div class="user-avatar">{{ request.user.username|slice:":1"|upper }}</div>
+                <div class="user-details">
+                    <div class="user-name">{{ request.user.username }}</div>
+                    <div class="user-role">Writer</div>
+                </div>
+            </div>
+            <a href="{% url 'logout' %}" class="logout-link">
+                <i class="fas fa-sign-out-alt"></i> Sign out
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">New Post</h1>
+                <p class="page-subtitle">Write something worth reading.</p>
+            </div>
+            <a href="{% url 'dashboard' %}" class="cancel-link">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+
+        <!-- Error Messages -->
+        {% if error %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Post Form -->
+        <form method="POST" enctype="multipart/form-data" id="postForm">
+            {% csrf_token %}
+
+            <div class="form-card">
+                <!-- Title Section -->
+                <div class="form-section">
+                    <div class="section-label">
+                        <i class="fas fa-heading"></i> Title
+                    </div>
+                    <input type="text" name="title" id="titleInput" class="title-input" 
+                           placeholder="Give your story a title..." maxlength="120" required>
+                    <div class="char-counter">
+                        <span id="titleCount">0</span> / 120 characters
+                    </div>
+                </div>
+
+                <!-- Content Section -->
+                <div class="form-section">
+                    <div class="section-label">
+                        <i class="fas fa-paragraph"></i> Content
+                    </div>
+                    <textarea name="content" id="contentInput" class="content-textarea" 
+                              placeholder="Start writing your story here..." rows="12" required></textarea>
+                </div>
+
+                <!-- Image Upload Section -->
+                <div class="form-section">
+                    <div class="section-label">
+                        <i class="fas fa-image"></i> Cover Image
+                    </div>
+                    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imageInput').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p class="upload-text">Click to upload a cover image</p>
+                        <p class="upload-sub">PNG, JPG, WEBP — recommended 1200×630px</p>
+                        <input type="file" name="image" id="imageInput" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                    </div>
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImg" src="" alt="Preview">
+                        <button type="button" class="remove-image" onclick="removeImage()">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="form-footer">
+                    <span class="footer-hint">
+                        <i class="fas fa-info-circle"></i> Your post will be published immediately.
+                    </span>
+                    <button type="submit" class="publish-btn">
+                        <i class="fas fa-paper-plane"></i> Publish Post
+                    </button>
+                </div>
+            </div>
+        </form>
+    </main>
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+    }
+
+    // Title character counter
+    const titleInput = document.getElementById('titleInput');
+    const titleCount = document.getElementById('titleCount');
+    
+    titleInput.addEventListener('input', function() {
+        titleCount.textContent = this.value.length;
+    });
+
+    // Image preview
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewImg = document.getElementById('previewImg');
+                const previewContainer = document.getElementById('imagePreview');
+                previewImg.src = e.target.result;
+                previewContainer.style.display = 'block';
+                document.getElementById('uploadZone').style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removeImage() {
+        const imageInput = document.getElementById('imageInput');
+        const previewContainer = document.getElementById('imagePreview');
+        const uploadZone = document.getElementById('uploadZone');
+        
+        imageInput.value = '';
+        previewContainer.style.display = 'none';
+        uploadZone.style.display = 'block';
+    }
+
+    // Form validation
+    document.getElementById('postForm').addEventListener('submit', function(e) {
+        const title = titleInput.value.trim();
+        const content = document.getElementById('contentInput').value.trim();
+        
+        if (!title) {
+            e.preventDefault();
+            alert('Please enter a title for your post.');
+            titleInput.focus();
+            return false;
+        }
+        
+        if (!content) {
+            e.preventDefault();
+            alert('Please enter some content for your post.');
+            document.getElementById('contentInput').focus();
+            return false;
+        }
+        
+        return true;
+    });
+</script>
+
+</body>
+</html>

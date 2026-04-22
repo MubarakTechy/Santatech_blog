@@ -1,0 +1,1147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SantaTech | Modern Stories</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+  --navy: #0f1e3c;
+  --navy-mid: #1e3a6b;
+  --navy-light: #2c3f66;
+  --sky: #eef2fb;
+  --muted: #5c6f8f;
+  --gold: #c9a84c;
+  --white: #ffffff;
+  --border: rgba(15, 30, 60, 0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--sky);
+  color: var(--navy);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #dce3f0; }
+::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 10px; }
+
+/* ══════════════════════════════════════════
+   MOBILE HEADER
+══════════════════════════════════════════ */
+.mobile-header {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--navy);
+  padding: 0 20px;
+  height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 20px rgba(15,30,60,0.3);
+}
+
+.mobile-logo {
+  color: #fff;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.4rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-logo i { color: var(--gold); font-size: 1.1rem; }
+
+/* Hamburger Button */
+.menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 4px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.menu-btn:hover { background: rgba(255,255,255,0.1); }
+
+.bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 0.35s cubic-bezier(.77,0,.175,1), opacity 0.2s, width 0.3s;
+  transform-origin: center;
+}
+
+.menu-btn.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-btn.active .bar:nth-child(2) { opacity: 0; width: 0; }
+.menu-btn.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ══════════════════════════════════════════
+   DRAWER (MOBILE SIDEBAR)
+══════════════════════════════════════════ */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  z-index: 198;
+  pointer-events: none;
+  transition: background 0.35s;
+}
+
+.drawer-overlay.open {
+  background: rgba(0,0,0,0.55);
+  pointer-events: all;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(320px, 85vw);
+  height: 100dvh;
+  background: var(--navy);
+  z-index: 199;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(.77,0,.175,1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.drawer.open { transform: translateX(0); }
+
+.drawer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.drawer-brand {
+  color: #fff;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.drawer-brand i { color: var(--gold); }
+
+.close-btn {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.close-btn:hover { background: rgba(255,255,255,0.18); }
+
+.drawer-nav {
+  list-style: none;
+  padding: 24px 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drawer-nav li { margin-bottom: 4px; }
+
+.drawer-nav li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.drawer-nav li a:hover,
+.drawer-nav li a.active {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  padding-left: 20px;
+}
+
+.drawer-nav li a i {
+  width: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.drawer-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 8px 16px;
+}
+
+.drawer-auth-btns {
+  display: flex;
+  gap: 10px;
+  padding: 16px;
+  flex-wrap: wrap;
+}
+
+.drawer-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+}
+
+.drawer-btn-outline {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  color: #fff;
+}
+.drawer-btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+.drawer-btn-solid {
+  background: var(--gold);
+  color: var(--navy);
+}
+.drawer-btn-solid:hover { background: #e0b85a; }
+
+.drawer-user {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.drawer-avatar {
+  width: 42px;
+  height: 42px;
+  background: var(--navy-mid);
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.drawer-user-info { flex: 1; min-width: 0; }
+.drawer-user-name { color: #fff; font-weight: 600; font-size: 0.9rem; truncate: ellipsis; white-space: nowrap; overflow: hidden; }
+.drawer-user-role { color: rgba(255,255,255,0.5); font-size: 0.75rem; margin-top: 2px; }
+
+/* ══════════════════════════════════════════
+   DESKTOP HEADER
+══════════════════════════════════════════ */
+.container { max-width: 1280px; margin: 0 auto; padding: 28px 32px; }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 44px;
+  padding: 10px 10px 10px 24px;
+  border-radius: 60px;
+  background: rgba(15,30,60,0.03);
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.3px;
+}
+.logo i { color: var(--gold); font-size: 1.2rem; }
+
+.nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.nav a {
+  text-decoration: none;
+  color: var(--navy-light);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 30px;
+  transition: all 0.2s;
+}
+.nav a:hover { background: rgba(15,30,60,0.07); color: var(--navy); }
+
+.nav .nav-cta {
+  background: var(--navy);
+  color: var(--sky);
+  padding: 8px 22px;
+}
+.nav .nav-cta:hover { background: var(--navy-mid); transform: translateY(-1px); }
+
+.nav .nav-cta-outline {
+  border: 1.5px solid var(--navy);
+  color: var(--navy);
+  padding: 7px 20px;
+}
+.nav .nav-cta-outline:hover { background: var(--navy); color: var(--sky); }
+
+/* ══════════════════════════════════════════
+   FEATURED CAROUSEL
+══════════════════════════════════════════ */
+.featured-carousel {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  margin-bottom: 56px;
+  /* Responsive height via aspect-ratio with a min/max */
+  aspect-ratio: 16 / 6;
+  min-height: 240px;
+  max-height: 480px;
+  box-shadow: 0 20px 60px -10px rgba(15,30,60,0.3);
+}
+
+.featured-card {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  will-change: opacity;
+}
+
+.featured-card.active { opacity: 1; z-index: 1; }
+
+/* The image — always fills the slot perfectly */
+.featured-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Gradient overlay */
+.featured-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10, 18, 40, 0.88) 0%,
+    rgba(10, 18, 40, 0.35) 50%,
+    rgba(10, 18, 40, 0.05) 100%
+  );
+  pointer-events: none;
+}
+
+.featured-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(16px, 4vw, 36px);
+  color: #fff;
+  z-index: 2;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 5px 14px;
+  border-radius: 40px;
+  font-size: clamp(10px, 1.5vw, 12px);
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.featured-content h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.1rem, 3.5vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.25;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  max-width: 600px;
+}
+
+/* Carousel Buttons */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  width: clamp(36px, 5vw, 48px);
+  height: clamp(36px, 5vw, 48px);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.carousel-btn.prev { left: clamp(10px, 2.5vw, 24px); }
+.carousel-btn.next { right: clamp(10px, 2.5vw, 24px); }
+
+/* Carousel Dots */
+.carousel-dots {
+  position: absolute;
+  bottom: clamp(12px, 2vw, 20px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+.dot.active {
+  background: #fff;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ══════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════ */
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 36px;
+  align-items: start;
+}
+
+/* ══════════════════════════════════════════
+   POSTS
+══════════════════════════════════════════ */
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  margin-bottom: 24px;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.post-card {
+  background: var(--white);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(15,30,60,0.04);
+  transition: all 0.35s cubic-bezier(0.2,0,0,1);
+  display: flex;
+  flex-direction: column;
+}
+
+.post-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -10px rgba(15,30,60,0.18);
+  border-color: rgba(15,30,60,0.12);
+}
+
+/* Card image — responsive */
+.card-img-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: linear-gradient(145deg, #dce3f0, #eef2fb);
+  flex-shrink: 0;
+}
+
+.card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.post-card:hover .card-img-wrap img { transform: scale(1.04); }
+
+/* For posts without images — fallback gradient */
+.card-img-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(145deg, #dce3f0 0%, #c8d2ea 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-img-placeholder i {
+  font-size: 2rem;
+  color: rgba(15,30,60,0.2);
+}
+
+.card-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+
+.post-meta {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.post-category {
+  color: var(--navy);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-size: 10px;
+  background: var(--sky);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.card-content h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.35;
+  margin-bottom: 10px;
+  flex: 1;
+}
+
+.card-content h3 a {
+  text-decoration: none;
+  color: var(--navy);
+  transition: color 0.2s;
+}
+
+.card-content h3 a:hover { color: var(--navy-mid); }
+
+.card-excerpt {
+  font-size: 13px;
+  color: #3a4a6e;
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+.read-link {
+  color: var(--navy);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  transition: gap 0.2s;
+}
+
+.read-link:hover { gap: 10px; }
+
+/* ══════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════ */
+.sidebar { position: sticky; top: 24px; }
+
+.sidebar-widget {
+  background: var(--white);
+  padding: 22px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(15,30,60,0.04);
+  transition: transform 0.25s;
+}
+
+.sidebar-widget:hover { transform: translateY(-3px); }
+
+.sidebar-widget h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 14px;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-widget h3 i { font-size: 0.9rem; color: var(--muted); }
+
+.topic-list { list-style: none; }
+
+.topic-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.topic-list li:last-child { border-bottom: none; }
+.topic-list li:hover { color: var(--navy); padding-left: 4px; }
+.topic-list li i { width: 18px; text-align: center; font-size: 0.85rem; color: var(--muted); }
+
+.sidebar-widget input {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 40px;
+  border: 1.5px solid #dce3f0;
+  background: var(--sky);
+  margin-bottom: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.sidebar-widget input:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(15,30,60,0.08);
+}
+
+.sidebar-widget button {
+  width: 100%;
+  background: var(--navy);
+  color: var(--sky);
+  padding: 11px;
+  border-radius: 40px;
+  border: none;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sidebar-widget button:hover { background: var(--navy-mid); transform: scale(0.98); }
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 40px;
+  background: var(--white);
+  border-radius: 20px;
+  border: 1.5px dashed rgba(15,30,60,0.15);
+  color: var(--muted);
+  grid-column: 1 / -1;
+}
+
+.empty-state i { font-size: 3rem; margin-bottom: 12px; opacity: 0.3; display: block; }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .header { display: none; }
+  .mobile-header { display: flex; }
+
+  .container { padding: 20px 20px; }
+
+  .featured-carousel {
+    aspect-ratio: 16 / 7;
+    border-radius: 20px;
+    margin-bottom: 36px;
+  }
+
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+  .posts-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .container { padding: 16px 14px; }
+
+  .featured-carousel {
+    aspect-ratio: 4 / 3;
+    min-height: 200px;
+    max-height: 340px;
+    border-radius: 16px;
+    margin-bottom: 28px;
+    margin-top: 14px;
+  }
+
+  .featured-content h1 { font-size: clamp(1rem, 5vw, 1.4rem); }
+
+  .section-title { font-size: 1.5rem; }
+
+  .posts-grid { gap: 16px; }
+
+  .card-content { padding: 16px; }
+  .card-content h3 { font-size: 1rem; }
+
+  .sidebar-widget { padding: 18px; }
+}
+
+@media (max-width: 400px) {
+  .featured-carousel { aspect-ratio: 1 / 1; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ══ MOBILE HEADER ══ -->
+<div class="mobile-header" id="mobileHeader">
+  <a href="/" class="mobile-logo">
+    <i class="fas fa-feather-alt"></i> SantaTech
+  </a>
+  <button class="menu-btn" id="menuBtn" onclick="toggleDrawer()" aria-label="Open menu">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+</div>
+
+<!-- ══ DRAWER OVERLAY ══ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+
+<!-- ══ SIDE DRAWER ══ -->
+<div class="drawer" id="drawer">
+  <div class="drawer-top">
+    <a href="/" class="drawer-brand">
+      <i class="fas fa-feather-alt"></i> SantaTech
+    </a>
+    <button class="close-btn" onclick="toggleDrawer()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <ul class="drawer-nav">
+    <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
+    <li><a href="#"><i class="fas fa-newspaper"></i> News</a></li>
+    <li><a href="#"><i class="fas fa-globe-americas"></i> Culture</a></li>
+    <li><a href="#"><i class="fas fa-microchip"></i> Tech</a></li>
+    <li><a href="#"><i class="fas fa-pen-fancy"></i> Writing</a></li>
+
+    <div class="drawer-divider"></div>
+
+    {% if user.is_authenticated %}
+      {% if user.userType == 'author' %}
+        <li><a href="{% url 'dashboard' %}"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+      {% elif user.userType == 'admin' %}
+        <li><a href="#"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
+      {% endif %}
+      <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    {% else %}
+      <li><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+      <li><a href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Create Account</a></li>
+    {% endif %}
+  </ul>
+
+  {% if not user.is_authenticated %}
+  <div class="drawer-auth-btns">
+    <a href="{% url 'login' %}" class="drawer-btn drawer-btn-outline">Log In</a>
+    <a href="{% url 'signup' %}" class="drawer-btn drawer-btn-solid">Sign Up</a>
+  </div>
+  {% endif %}
+
+  <div class="drawer-user">
+    <div class="drawer-avatar">
+      {% if user.is_authenticated %}
+        {{ user.username|slice:":1"|upper }}
+      {% else %}
+        <i class="fas fa-user" style="font-size:0.9rem;"></i>
+      {% endif %}
+    </div>
+    <div class="drawer-user-info">
+      <div class="drawer-user-name">
+        {% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}
+      </div>
+      <div class="drawer-user-role">
+        {% if user.is_authenticated %}{{ user.userType|default:"Member" }}{% else %}Not signed in{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN CONTAINER ══ -->
+<div class="container">
+
+  <!-- DESKTOP HEADER -->
+  <header class="header">
+    <div class="logo">
+      <i class="fas fa-feather-alt"></i> SantaTech
+    </div>
+    <nav class="nav">
+      <a href="#">Home</a>
+      <a href="#">News</a>
+      <a href="#">Culture</a>
+      <a href="#">Tech</a>
+      {% if user.is_authenticated %}
+        {% if user.userType == 'author' %}
+          <a href="{% url 'dashboard' %}" class="nav-cta-outline">Dashboard</a>
+        {% elif user.userType == 'admin' %}
+          <a href="#" class="nav-cta-outline">Admin</a>
+        {% endif %}
+        <a href="{% url 'logout' %}" class="nav-cta">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="nav-cta-outline">Login</a>
+        <a href="{% url 'signup' %}" class="nav-cta">Sign Up</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <!-- FEATURED CAROUSEL -->
+  <div class="featured-carousel">
+
+    <div class="featured-card active">
+      <img src="{% static 'images/san-francisco-cityscape (2).jpg' %}" alt="San Francisco">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>Design in the age of AI: How to adapt lazily.</h1>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <img src="{% static 'images/london-cityscape.jpg' %}" alt="London">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>The future of creative writing in a digital world.</h1>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <img src="{% static 'images/tokyo-cityscape.jpg' %}" alt="Tokyo">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>Minimalism meets technology: Finding balance.</h1>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <img src="{% static 'images/paris-cityscape.jpg' %}" alt="Paris">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>Why stories matter more than ever in 2025.</h1>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <img src="{% static 'images/dubai-cityscape.jpg' %}" alt="Dubai">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>The art of slow reading in a fast-paced world.</h1>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <img src="{% static 'images/singapore-cityscape.jpg' %}" alt="Singapore">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>How cities inspire creativity and innovation.</h1>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <img src="{% static 'images/sydney-cityscape.jpg' %}" alt="Sydney">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>Digital detox: Reclaiming your attention span.</h1>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <img src="{% static 'images/san-francisco-cityscape.jpg' %}" alt="San Francisco">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>The rise of indie publishing and self-expression.</h1>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <img src="{% static 'images/chicago-cityscape.jpg' %}" alt="Chicago">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>Writing tips from legendary authors you need.</h1>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <img src="{% static 'images/seoul-cityscape.jpg' %}" alt="Seoul">
+      <div class="featured-content">
+        <span class="badge"><i class="fas fa-star"></i> Featured</span>
+        <h1>Building a creative routine that actually works.</h1>
+      </div>
+    </div>
+
+    <button class="carousel-btn prev" onclick="changeSlide(-1)" aria-label="Previous">&#8249;</button>
+    <button class="carousel-btn next" onclick="changeSlide(1)" aria-label="Next">&#8250;</button>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="layout">
+
+    <!-- POSTS -->
+    <div>
+      <h2 class="section-title">
+        <i class="fas fa-newspaper" style="font-size:1.2rem; color:var(--muted);"></i>
+       Latest Headlines
+      </h2>
+
+      <div class="posts-grid">
+        {% for post in posts %}
+        <article class="post-card">
+          {% if post.image %}
+          <div class="card-img-wrap">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" loading="lazy">
+          </div>
+          {% else %}
+          <div class="card-img-placeholder">
+            <i class="fas fa-image"></i>
+          </div>
+          {% endif %}
+
+          <div class="card-content">
+            <div class="post-meta">
+              <span class="post-category">{{ post.category }}</span>
+              <span><i class="far fa-calendar-alt"></i> {{ post.created_at|date:"M d, Y" }}</span>
+              <span><i class="far fa-user"></i> {{ post.author.username }}</span>
+              <span><i class="far fa-eye"></i> {{ post.views }}</span>
+            </div>
+
+            <h3><a href="{% url 'post' post.id %}">{{ post.title }}</a></h3>
+
+            <p class="card-excerpt">{{ post.content|truncatewords:20|safe }}</p>
+
+            <a class="read-link" href="{% url 'post' post.id %}">
+              Read more <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        {% empty %}
+        <a href="{% url 'signup' %}">
+             <div class="empty-state">
+          <i class="fas fa-book-open"></i>
+          <p>No stories published yet. Be the first to write!</p>
+        </div>
+        {% endfor %}
+      </div>
+        </a>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-widget">
+        <h3><i class="fas fa-info-circle"></i> About</h3>
+        <p style="font-size:14px; line-height:1.65; color:#3a4a6e;">
+          Thoughtful stories on tech, creativity, and modern life. Exploring ideas that matter — one word at a time.
+        </p>
+      </div>
+
+      <div class="sidebar-widget">
+        <h3><i class="fas fa-hashtag"></i> Topics</h3>
+        <ul class="topic-list">
+          <li><i class="fas fa-microchip"></i> Digital Minimalism</li>
+          <li><i class="fas fa-robot"></i> Technology</li>
+          <li><i class="fas fa-pen-fancy"></i> Writing & Creativity</li>
+          <li><i class="fas fa-brain"></i> Future Thinking</li>
+          <li><i class="fas fa-city"></i> Culture & Society</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-widget">
+        <h3><i class="far fa-envelope"></i> Newsletter</h3>
+        <p style="font-size:13px; margin-bottom:14px; color:#3a4a6e; line-height:1.55;">
+          Get the latest stories delivered straight to your inbox.
+        </p>
+        <input type="email" placeholder="your@email.com" id="newsletterEmail">
+        <button id="subscribeBtn"><i class="fas fa-paper-plane"></i> Subscribe</button>
+      </div>
+    </aside>
+
+  </div>
+</div>
+ <footer>
+    
+ </footer>
+
+<script>
+/* ── DRAWER TOGGLE ── */
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const overlay = document.getElementById('drawerOverlay');
+  const btn = document.getElementById('menuBtn');
+
+  const isOpen = drawer.classList.contains('open');
+
+  drawer.classList.toggle('open', !isOpen);
+  overlay.classList.toggle('open', !isOpen);
+  btn.classList.toggle('active', !isOpen);
+  document.body.style.overflow = isOpen ? '' : 'hidden';
+}
+
+// Close drawer when a link inside is clicked
+document.querySelectorAll('.drawer-nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    const drawer = document.getElementById('drawer');
+    if (drawer.classList.contains('open')) toggleDrawer();
+  });
+});
+
+// Close on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const drawer = document.getElementById('drawer');
+    if (drawer.classList.contains('open')) toggleDrawer();
+  }
+});
+
+/* ── CAROUSEL ── */
+let currentSlide = 0;
+const slides = document.querySelectorAll('.featured-card');
+const totalSlides = slides.length;
+let autoSlide;
+
+// Build dots
+const dotsContainer = document.getElementById('carouselDots');
+slides.forEach((_, i) => {
+  const dot = document.createElement('button');
+  dot.classList.add('dot');
+  if (i === 0) dot.classList.add('active');
+  dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+  dot.addEventListener('click', () => { goToSlide(i); resetAuto(); });
+  dotsContainer.appendChild(dot);
+});
+
+function showSlide(idx) {
+  slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  currentSlide = idx;
+}
+
+function changeSlide(dir) {
+  let next = currentSlide + dir;
+  if (next < 0) next = totalSlides - 1;
+  if (next >= totalSlides) next = 0;
+  showSlide(next);
+  resetAuto();
+}
+
+function goToSlide(idx) { showSlide(idx); }
+
+function resetAuto() {
+  clearInterval(autoSlide);
+  autoSlide = setInterval(() => changeSlide(1), 5000);
+}
+
+if (totalSlides > 0) {
+  resetAuto();
+  const carousel = document.querySelector('.featured-carousel');
+  carousel.addEventListener('mouseenter', () => clearInterval(autoSlide));
+  carousel.addEventListener('mouseleave', resetAuto);
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  carousel.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  carousel.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) changeSlide(diff > 0 ? 1 : -1);
+  });
+}
+
+/* ── NEWSLETTER ── */
+document.getElementById('subscribeBtn')?.addEventListener('click', () => {
+  const email = document.getElementById('newsletterEmail').value.trim();
+  if (email && email.includes('@')) {
+    alert('📬 Thanks for subscribing! (demo)');
+    document.getElementById('newsletterEmail').value = '';
+  } else {
+    alert(email ? 'Please enter a valid email address.' : 'Enter an email to subscribe.');
+  }
+});
+</script>
+
+</body>
+</html>

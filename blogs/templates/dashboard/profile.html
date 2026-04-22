@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dashboard & Profile — SantaTech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --navy:        #0f1e3c;
+            --navy-mid:    #1a3060;
+            --navy-light:  #243d72;
+            --navy-soft:   #2e4d8a;
+            --navy-pale:   #dce6f5;
+            --navy-ghost:  #eef2fb;
+            --gold:        #c9a84c;
+            --ink:         #0d1b36;
+            --ink-mid:     #2c3e6b;
+            --ink-soft:    #5a6e9c;
+            --ink-muted:   #8fa0c0;
+            --paper:       #f7f9fc;
+            --paper-warm:  #f0f4fa;
+            --paper-mid:   #dce5f0;
+            --white:       #ffffff;
+            --serif: 'Playfair Display', Georgia, serif;
+            --sans: 'DM Sans', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--sans);
+            font-weight: 400;
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 260px;
+            background: var(--navy);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .brand {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--white);
+            padding: 1.8rem 1.5rem;
+            display: block;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand span { color: var(--gold); }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1.5rem;
+            color: var(--ink-muted);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-nav li a:hover,
+        .sidebar-nav li a.active {
+            background: var(--navy-mid);
+            color: var(--white);
+            border-left: 3px solid var(--gold);
+        }
+
+        .sidebar-nav li a i {
+            width: 20px;
+            font-size: 1rem;
+        }
+
+        .sidebar-bottom {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: auto;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--navy-soft);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            color: var(--white);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            color: var(--ink-muted);
+            font-size: 0.7rem;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ink-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logout-link:hover { color: #f87171; }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            background: var(--navy);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 98;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            margin-left: 260px;
+            padding: 2rem;
+            max-width: calc(100% - 260px);
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .greeting {
+            font-family: var(--serif);
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--ink-muted);
+        }
+
+        .page-title {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .btn-new {
+            background: var(--navy);
+            color: var(--white);
+            padding: 0.7rem 1.3rem;
+            border-radius: 40px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .btn-new:hover { background: var(--navy-mid); }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--paper-mid);
+            border-radius: 16px;
+            padding: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .stat-sub {
+            font-size: 0.7rem;
+            color: var(--ink-muted);
+            margin-top: 0.3rem;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: var(--white);
+            border-radius: 20px;
+            border: 1px solid var(--paper-mid);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .profile-cover {
+            background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+            height: 80px;
+        }
+
+        .avatar-section {
+            text-align: center;
+            margin-top: -40px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--white);
+            background: var(--paper-mid);
+        }
+
+        .avatar-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--navy-pale), var(--paper-mid));
+            border: 3px solid var(--white);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--navy);
+        }
+
+        .profile-info {
+            padding: 1rem 1.5rem;
+            text-align: center;
+        }
+
+        .profile-name {
+            font-family: var(--serif);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .profile-email {
+            font-size: 0.8rem;
+            color: var(--ink-muted);
+            margin-top: 0.2rem;
+        }
+
+        .profile-meta {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 0.8rem;
+            font-size: 0.7rem;
+            color: var(--ink-soft);
+        }
+
+        /* Upload Form */
+        .upload-form {
+            padding: 0 1.5rem 1.2rem;
+            border-top: 1px solid var(--paper-mid);
+        }
+
+        .upload-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--ink-mid);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.8rem;
+        }
+
+        .file-btn {
+            background: var(--paper-warm);
+            border: 1px solid var(--paper-mid);
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .file-name {
+            font-size: 0.7rem;
+            color: var(--ink-muted);
+        }
+
+        .upload-btn {
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 0.6rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .upload-btn:hover { background: var(--navy-mid); }
+
+        /* Recent Posts */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
+
+        .view-all {
+            font-size: 0.7rem;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .posts-list {
+            background: var(--white);
+            border: 1px solid var(--paper-mid);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .post-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1.2rem;
+            border-bottom: 1px solid var(--paper-warm);
+            transition: background 0.15s;
+        }
+
+        .post-row:last-child { border-bottom: none; }
+        .post-row:hover { background: var(--navy-ghost); }
+
+        .post-index {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--paper-deep, #c5d3e8);
+            width: 24px;
+        }
+
+        .post-info { flex: 1; }
+
+        .post-title-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .post-date {
+            font-size: 0.7rem;
+            color: var(--ink-muted);
+            margin-top: 0.2rem;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 0.4rem;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .post-row:hover .post-actions { opacity: 1; }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1px solid var(--paper-mid);
+            background: var(--paper);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--ink-soft);
+            cursor: pointer;
+        }
+
+        .action-btn:hover { background: var(--navy-ghost); color: var(--navy); }
+        .action-btn.danger:hover { background: #fef2f2; color: #b91c1c; }
+
+        /* Empty State */
+        .empty-state {
+            background: var(--white);
+            border: 1px solid var(--paper-mid);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 2.5rem;
+            color: var(--ink-muted);
+            opacity: 0.5;
+            margin-bottom: 1rem;
+        }
+
+        .empty-title {
+            font-family: var(--serif);
+            font-size: 1.1rem;
+            color: var(--ink-soft);
+        }
+
+        .empty-sub {
+            font-size: 0.8rem;
+            color: var(--ink-muted);
+            margin: 0.5rem 0;
+        }
+
+        .btn-empty {
+            background: var(--navy);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Messages */
+        .message {
+            padding: 0.7rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 3px solid #2e7d32;
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 3px solid #c62828;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            aside {
+                transform: translateX(-100%);
+            }
+            aside.open {
+                transform: translateX(0);
+            }
+            .mobile-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .overlay.open {
+                display: block;
+            }
+            main {
+                margin-left: 0;
+                padding: 1rem;
+                max-width: 100%;
+            }
+            .stats-row {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .post-actions {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .file-input-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .file-name {
+                text-align: center;
+            }
+            .profile-meta {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile Header -->
+<div class="mobile-header">
+    <a href="/" style="color: white; text-decoration: none; font-family: var(--serif); font-style: italic;">
+        Echo & <span style="color: var(--gold);">Ink</span>
+    </a>
+    <button class="menu-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <a href="/" class="brand">Santa & <span>Tech</span></a>
+        <ul class="sidebar-nav">
+            <li><a href="#" class="active"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="{% url 'create_post' %}"><i class="fas fa-plus-circle"></i> New Post</a></li>
+            <li><a href="{% url 'my_post' %}"><i class="fas fa-book"></i> My Posts</a></li>
+            <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+        <div class="sidebar-bottom">
+            <div class="user-info">
+                <div class="user-avatar">{{ request.user.username|slice:":1"|upper }}</div>
+                <div class="user-details">
+                    <div class="user-name">{{ request.user.username }}</div>
+                    <div class="user-role">Writer</div>
+                </div>
+            </div>
+            <a href="{% url 'logout' %}" class="logout-link">
+                <i class="fas fa-sign-out-alt"></i> Sign out
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <div class="page-header">
+            <div>
+                <p class="greeting">Welcome back,</p>
+                <h1 class="page-title">{{ request.user.username }}</h1>
+            </div>
+            <a href="{% url 'create_post' %}" class="btn-new">
+                <i class="fas fa-plus"></i> New Post
+            </a>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-label">Total Posts</div>
+                <div class="stat-value">{{ posts|length }}</div>
+                <div class="stat-sub">published articles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Latest Activity</div>
+                <div class="stat-value" style="font-size:1.2rem;">
+                    {% if posts %}{{ posts.0.created_at|date:"M j, Y" }}{% else %}—{% endif %}
+                </div>
+                <div class="stat-sub">most recent post</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Member Since</div>
+                <div class="stat-value" style="font-size:1.2rem;">{{ request.user.date_joined|date:"M j, Y" }}</div>
+                <div class="stat-sub">{{ request.user.date_joined|date:"F Y" }}</div>
+            </div>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="profile-cover"></div>
+            <div class="avatar-section">
+                {% if user.profile_picture and user.profile_picture.url %}
+                    <img class="avatar" src="{{ user.profile_picture.url }}" alt="{{ user.username }}">
+                {% else %}
+                    <div class="avatar-placeholder">
+                        <i class="fas fa-user"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="profile-info">
+                <div class="profile-name">{{ user.username }}</div>
+                <div class="profile-email">{{ user.email }}</div>
+                <div class="profile-meta">
+                    <span><i class="fas fa-feather-alt"></i> Writer</span>
+                    <span><i class="fas fa-calendar"></i> {{ user.date_joined|date:"F Y" }}</span>
+                </div>
+            </div>
+
+            <!-- Upload Form -->
+            <form method="post" enctype="multipart/form-data" class="upload-form">
+                {% csrf_token %}
+                <div class="upload-label">
+                    <i class="fas fa-camera"></i> Change profile picture
+                </div>
+                <div class="file-input-wrapper">
+                    <label class="file-btn">
+                        <i class="fas fa-folder-open"></i> Choose file
+                        <input type="file" name="profile_picture" accept="image/*" id="profileInput" style="display:none;" onchange="updateFileName(this)">
+                    </label>
+                    <span class="file-name" id="fileName">No file chosen</span>
+                </div>
+                <button type="submit" class="upload-btn">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+            </form>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Recent Posts Section -->
+        <div class="section-header">
+            <span class="section-title"><i class="fas fa-clock"></i> Recent Posts</span>
+            <a href="{% url 'my_post' %}" class="view-all">View all →</a>
+        </div>
+
+        {% if posts %}
+        <div class="posts-list">
+            {% for post in posts|slice:":5" %}
+            <div class="post-row">
+                <span class="post-index">{{ forloop.counter }}</span>
+                <div class="post-info">
+                    <div class="post-title-text">{{ post.title }}</div>
+                    <div class="post-date">{{ post.created_at|date:"F j, Y" }}</div>
+                </div>
+                <div class="post-actions">
+                    <a href="{% url 'post' post.id %}" class="action-btn" title="View">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="{% url 'edit_post' post.id %}" class="action-btn" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button class="action-btn danger" title="Delete
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-pen-fade"></i></div>
+            <p class="empty-title">No posts yet</p>
+            <p class="empty-sub">Your first story is waiting to be written.</p>
+            <a href="{% url 'create_post' %}" class="btn-empty">
+                <i class="fas fa-plus"></i> Write your first post
+            </a>
+        </div>
+        {% endif %}
+    </main>
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+    }
+
+    function updateFileName(input) {
+        const fileNameSpan = document.getElementById('fileName');
+        if (input.files && input.files.length > 0) {
+            fileNameSpan.textContent = input.files[0].name;
+        } else {
+            fileNameSpan.textContent = 'No file chosen';
+        }
+    }
+
+    document.querySelector('.file-btn')?.addEventListener('click', function() {
+        document.getElementById('profileInput')?.click();
+    });
+
+    function deletePost(postId) {
+        if (confirm('Are you sure you want to delete this post?')) {
+            let csrfToken = '';
+            const cookieValue = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
+            csrfToken = cookieValue ? cookieValue.split('=')[1] : '';
+            
+            fetch(`/post/delete/${postId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin'
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Error deleting post.');
+                }
+            }).catch(() => {
+                alert('Could not delete post.');
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
