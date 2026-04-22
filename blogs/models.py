@@ -5,6 +5,8 @@ from django.contrib.auth.models import (
     BaseUserManager
 )
 from cloudinary.models import CloudinaryField
+from .models import Post, Comment
+from django.shortcuts import render, get_object_or_404, redirect
 
 
 # 🔥 Custom Manager
@@ -96,3 +98,18 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author.username} on {self.post.title}"
+
+
+   
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    prev_post = Post.objects.filter(id__lt=post_id).order_by('-id').first()
+    next_post = Post.objects.filter(id__gt=post_id).order_by('id').first()
+    
+    context = {
+        'post': post,
+        'prev_post': prev_post,
+        'next_post': next_post,
+    }
+    return render(request, 'post_detail.html', context)

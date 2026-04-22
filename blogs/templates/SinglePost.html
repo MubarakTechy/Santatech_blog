@@ -48,6 +48,8 @@
             background: var(--paper);
             border-bottom: 1px solid var(--paper-mid);
             backdrop-filter: blur(8px);
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .nav-brand {
@@ -59,7 +61,13 @@
             letter-spacing: -0.01em;
         }
 
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links { 
+            display: flex; 
+            gap: 1.5rem; 
+            list-style: none; 
+            align-items: center;
+            flex-wrap: wrap;
+        }
         .nav-links a {
             font-size: 0.82rem;
             font-weight: 400;
@@ -70,6 +78,17 @@
             transition: color 0.2s;
         }
         .nav-links a:hover { color: var(--ink); }
+        
+        .nav-links li {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .nav-links i {
+            font-size: 0.8rem;
+            color: var(--ink-muted);
+        }
 
         /* ── HERO IMAGE ── */
         .post-hero {
@@ -201,7 +220,7 @@
             margin-top: 1px;
         }
 
-        /* ── SHARE SECTION (new) ── */
+        /* ── SHARE SECTION ── */
         .share-section {
             margin: 2rem 0 2rem;
             padding: 1.5rem 0;
@@ -219,10 +238,6 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-
-        .share-label i {
-            font-size: 0.85rem;
         }
 
         .share-buttons {
@@ -247,53 +262,65 @@
             cursor: pointer;
         }
 
-        .share-btn i {
-            font-size: 1rem;
-            transition: transform 0.2s;
+        .share-btn i { font-size: 1rem; transition: transform 0.2s; }
+        .share-btn:hover { transform: translateY(-2px); }
+        .share-btn:hover i { transform: scale(1.05); }
+
+        .share-btn.x:hover { background: #000000; color: white; border-color: #000000; }
+        .share-btn.facebook:hover { background: #1877f2; color: white; border-color: #1877f2; }
+        .share-btn.whatsapp:hover { background: #25D366; color: white; border-color: #25D366; }
+        .share-btn.instagram:hover { background: radial-gradient(circle at 30% 110%, #ffdb7e, #f9ce34, #e94057, #d82b8f, #8a2387); color: white; border-color: #d82b8f; }
+        .share-btn.copy-link:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+        /* Navigation between posts */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 3rem 0 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--paper-mid);
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .share-btn:hover {
+        .nav-post {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem;
+            background: var(--paper-warm);
+            border-radius: 16px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid var(--paper-mid);
+        }
+
+        .nav-post:hover {
+            background: var(--white);
+            border-color: var(--accent-soft);
             transform: translateY(-2px);
         }
 
-        .share-btn:hover i {
-            transform: scale(1.05);
+        .nav-post.prev { text-align: left; }
+        .nav-post.next { text-align: right; }
+
+        .nav-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--ink-muted);
+            margin-bottom: 0.3rem;
         }
 
-        /* individual brand hover colors */
-        .share-btn.x:hover {
-            background: #000000;
-            color: white;
-            border-color: #000000;
+        .nav-title {
+            font-family: var(--serif);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ink);
+            line-height: 1.3;
         }
 
-        .share-btn.facebook:hover {
-            background: #1877f2;
-            color: white;
-            border-color: #1877f2;
-        }
-
-        .share-btn.whatsapp:hover {
-            background: #25D366;
-            color: white;
-            border-color: #25D366;
-        }
-
-        .share-btn.instagram:hover {
-            background: radial-gradient(circle at 30% 110%, #ffdb7e, #f9ce34, #e94057, #d82b8f, #8a2387);
-            color: white;
-            border-color: #d82b8f;
-        }
-
-        /* copy link button */
-        .share-btn.copy-link {
-            background: var(--paper-mid);
-        }
-
-        .share-btn.copy-link:hover {
-            background: var(--ink);
-            color: var(--paper);
-            border-color: var(--ink);
+        .nav-post:hover .nav-title {
+            color: var(--accent);
         }
 
         /* toast notification */
@@ -380,6 +407,11 @@
             background: var(--paper-mid);
         }
 
+        /* ── COMMENTS ── */
+        .comments-wrapper {
+            margin-top: 3rem;
+        }
+
         /* ── FOOTER ── */
         footer {
             text-align: center;
@@ -408,38 +440,19 @@
 
         /* responsive */
         @media (max-width: 680px) {
-            nav {
-                padding: 0.9rem 1.5rem;
-            }
-            .nav-links {
-                gap: 1rem;
-            }
-            .post-wrapper {
-                padding: 0 1.2rem 4rem;
-            }
-            .share-buttons {
-                gap: 0.7rem;
-            }
-            .share-btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.75rem;
-            }
-            .toast-msg {
-                white-space: normal;
-                text-align: center;
-                max-width: 85%;
-                font-size: 0.75rem;
-                padding: 0.6rem 1.2rem;
-            }
+            nav { padding: 0.9rem 1.5rem; }
+            .nav-links { gap: 1rem; }
+            .post-wrapper { padding: 0 1.2rem 4rem; }
+            .share-buttons { gap: 0.7rem; }
+            .share-btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
+            .toast-msg { white-space: normal; text-align: center; max-width: 85%; font-size: 0.75rem; padding: 0.6rem 1.2rem; }
+            .post-navigation { flex-direction: column; }
+            .nav-post { text-align: center !important; }
         }
 
         @media (max-width: 480px) {
-            .share-buttons {
-                justify-content: center;
-            }
-            .share-label {
-                justify-content: center;
-            }
+            .share-buttons { justify-content: center; }
+            .share-label { justify-content: center; }
         }
     </style>
 </head>
@@ -448,14 +461,12 @@
     <nav>
         <a href="/" class="nav-brand">Santa &amp; Tech</a>
         <ul class="nav-links">
-            {{crsf_token}}
             {% if user.is_authenticated %}
-                <li  class="fas fa-chart-bar"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li class="fas fa-sign-out-alt"><a href="{% url 'logout' %}">Logout</a></li>
-
+                <li><i class="fas fa-chart-bar"></i> <a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><i class="fas fa-sign-out-alt"></i> <a href="{% url 'logout' %}">Logout</a></li>
             {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-                <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                <li><i class="fas fa-sign-in-alt"></i> <a href="{% url 'login' %}">Login</a></li>
+                <li><i class="fas fa-user-plus"></i> <a href="{% url 'signup' %}">Sign Up</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -489,30 +500,25 @@
             </div>
         </div>
 
-        <!-- SOCIAL SHARE SECTION (X, Facebook, WhatsApp, Instagram, Copy Link) -->
+        <!-- SOCIAL SHARE SECTION -->
         <div class="share-section">
             <div class="share-label">
                 <i class="fa-regular fa-share-from-square"></i> 
                 Share this story
             </div>
             <div class="share-buttons">
-                <!-- X (Twitter) -->
                 <a href="#" class="share-btn x" id="shareX" target="_blank" rel="noopener noreferrer">
                     <i class="fa-brands fa-x-twitter"></i> <span>X</span>
                 </a>
-                <!-- Facebook -->
                 <a href="#" class="share-btn facebook" id="shareFacebook" target="_blank" rel="noopener noreferrer">
                     <i class="fa-brands fa-facebook-f"></i> <span>Facebook</span>
                 </a>
-                <!-- WhatsApp -->
                 <a href="#" class="share-btn whatsapp" id="shareWhatsApp" target="_blank" rel="noopener noreferrer">
                     <i class="fa-brands fa-whatsapp"></i> <span>WhatsApp</span>
                 </a>
-                <!-- Instagram (share intent workaround: copy link + note) -->
                 <button class="share-btn instagram" id="shareInstagram">
                     <i class="fa-brands fa-instagram"></i> <span>Instagram</span>
                 </button>
-                <!-- Copy link button (universal) -->
                 <button class="share-btn copy-link" id="copyLinkBtn">
                     <i class="fa-regular fa-copy"></i> <span>Copy link</span>
                 </button>
@@ -520,44 +526,72 @@
         </div>
 
         <div class="post-content">
-            {{ post.content }}
+            {{ post.content|safe|linebreaks }}
         </div>
+
+        <!-- Navigation to Previous/Next Posts -->
+        {% if prev_post or next_post %}
+        <div class="post-navigation">
+            {% if prev_post %}
+            <a href="{% url 'post' prev_post.id %}" class="nav-post prev">
+                <div class="nav-label"><i class="fas fa-arrow-left"></i> Previous</div>
+                <div class="nav-title">{{ prev_post.title|truncatechars:50 }}</div>
+            </a>
+            {% else %}
+            <div class="nav-post prev" style="visibility: hidden;"></div>
+            {% endif %}
+            
+            {% if next_post %}
+            <a href="{% url 'post' next_post.id %}" class="nav-post next">
+                <div class="nav-label">Next <i class="fas fa-arrow-right"></i></div>
+                <div class="nav-title">{{ next_post.title|truncatechars:50 }}</div>
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
 
         <div class="content-divider">∞</div>
 
-        <!-- commnet section -->
-        <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-</div>
+        <!-- Comments Section -->
+        <div class="comments-wrapper">
+            <div id="disqus_thread"></div>
+            <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+        </div>
 
-<script>
-var disqus_config = function () {
-    this.page.url = "{{ request.scheme }}://{{ request.get_host }}{{ request.path }}";
-    this.page.identifier = "blog-{{ post.id }}";
-};
+    </div>
 
-(function() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://santatech.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-})();
+    <footer>
+        Written with intention on <span>Santa &amp; Tech</span>
+    </footer>
 
+    <div id="toastMessage" class="toast-msg"></div>
 
+    <script>
+        // Disqus Configuration
+        var disqus_config = function () {
+            this.page.url = "{{ request.scheme }}://{{ request.get_host }}{{ request.path }}";
+            this.page.identifier = "blog-{{ post.id }}";
+        };
+        
         (function() {
-            // Get current page URL and post title for sharing
-            const currentUrl = encodeURIComponent(window.location.href);
+            var d = document, s = d.createElement('script');
+            s.src = 'https://santatech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+
+        // Share functionality
+        (function() {
             const postTitle = "{{ post.title|escapejs }}";
             const fullUrl = window.location.href;
             
-            // Helper: open share popup or window
             function openShareWindow(url, width = 550, height = 450) {
                 const left = (window.innerWidth - width) / 2;
                 const top = (window.innerHeight - height) / 2;
                 window.open(url, '_blank', `width=${width},height=${height},left=${left},top=${top},resizable=yes`);
             }
 
-            // 1. X (Twitter)
+            // X (Twitter)
             const shareX = document.getElementById('shareX');
             if (shareX) {
                 shareX.addEventListener('click', (e) => {
@@ -567,7 +601,7 @@ var disqus_config = function () {
                 });
             }
 
-            // 2. Facebook
+            // Facebook
             const shareFb = document.getElementById('shareFacebook');
             if (shareFb) {
                 shareFb.addEventListener('click', (e) => {
@@ -577,7 +611,7 @@ var disqus_config = function () {
                 });
             }
 
-            // 3. WhatsApp (uses native sharing or web)
+            // WhatsApp
             const shareWa = document.getElementById('shareWhatsApp');
             if (shareWa) {
                 shareWa.addEventListener('click', (e) => {
@@ -587,26 +621,23 @@ var disqus_config = function () {
                 });
             }
 
-            // 4. Instagram: no direct share API, so copy link and show friendly toast/message
-            const shareIg = document.getElementById('shareInstagram');
+            // Toast function
             const toastMsg = document.getElementById('toastMessage');
-            
             function showToast(message, duration = 2500) {
                 if (!toastMsg) return;
-                toastMsg.textContent = message || 'Link copied to clipboard ✨';
+                toastMsg.textContent = message;
                 toastMsg.classList.add('show');
                 setTimeout(() => {
                     toastMsg.classList.remove('show');
                 }, duration);
             }
 
-            async function copyToClipboard(text, successMsg = 'Link copied! 📋') {
+            async function copyToClipboard(text, successMsg) {
                 try {
                     await navigator.clipboard.writeText(text);
                     showToast(successMsg);
                     return true;
                 } catch (err) {
-                    // fallback for older browsers
                     const textarea = document.createElement('textarea');
                     textarea.value = text;
                     document.body.appendChild(textarea);
@@ -618,16 +649,16 @@ var disqus_config = function () {
                 }
             }
 
+            // Instagram
+            const shareIg = document.getElementById('shareInstagram');
             if (shareIg) {
                 shareIg.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    // For Instagram, we copy the post link and notify user to paste in their story or DM
                     await copyToClipboard(fullUrl, '✨ Link copied! Share on Instagram via story or DM ✨');
-                    // optional subtle animation
                 });
             }
 
-            // 5. Copy link button (generic)
+            // Copy link button
             const copyBtn = document.getElementById('copyLinkBtn');
             if (copyBtn) {
                 copyBtn.addEventListener('click', async (e) => {
@@ -635,12 +666,8 @@ var disqus_config = function () {
                     await copyToClipboard(fullUrl, 'Post link copied to clipboard ✓');
                 });
             }
-
-         
-            console.log('Share components ready — X, Facebook, WhatsApp, Instagram (copy), Copy link');
         })();
     </script>
-<script id="dsq-count-scr" src="//santatech.disqus.com/count.js" async></script>
-
+    <script id="dsq-count-scr" src="//santatech.disqus.com/count.js" async></script>
 </body>
 </html>
