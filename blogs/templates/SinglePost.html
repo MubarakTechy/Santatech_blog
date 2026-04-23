@@ -454,6 +454,597 @@
             .share-buttons { justify-content: center; }
             .share-label { justify-content: center; }
         }
+
+
+
+        .more-posts-section {
+    margin: 3.5rem 0 2rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--paper-mid);
+}
+
+.more-posts-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 1.4rem;
+}
+
+.more-posts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+.more-post-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--paper-warm);
+    border: 1px solid var(--paper-mid);
+    text-decoration: none;
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.more-post-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-soft);
+    box-shadow: 0 6px 20px rgba(196, 80, 26, 0.08);
+}
+
+.more-post-img {
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+}
+
+.more-post-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.more-post-card:hover .more-post-img img {
+    transform: scale(1.04);
+}
+
+.more-post-body {
+    padding: 1rem 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.more-post-tag {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.more-post-title {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.4;
+}
+
+.more-post-card:hover .more-post-title {
+    color: var(--accent);
+}
+
+.more-post-meta {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    margin-top: 0.2rem;
+}
+
+@media (max-width: 520px) {
+    .more-posts-grid { grid-template-columns: 1fr; }
+}
+
+
+    /* Enhanced Comment Section Styling - Add this to your existing styles */
+    
+    /* Comments Header */
+    .comments-wrapper {
+        margin-top: 3rem;
+        background: transparent;
+        border-radius: 2rem;
+    }
+
+    .comments-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--paper-mid);
+    }
+
+    .comments-title {
+        font-family: var(--serif);
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    .comments-title i {
+        font-size: 1.3rem;
+        color: var(--accent);
+    }
+
+    /* New Comment Form */
+    .comment-form {
+        background: var(--paper-warm);
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        margin-bottom: 2.5rem;
+        border: 1px solid var(--paper-mid);
+        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .comment-form:focus-within {
+        box-shadow: 0 6px 16px rgba(196, 80, 26, 0.08);
+        border-color: var(--accent-soft);
+    }
+
+    .comment-form-top {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .comment-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--accent-soft);
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+        border: 1.5px solid var(--paper-mid);
+        transition: all 0.2s;
+    }
+
+    .comment-input {
+        flex: 1;
+        background: white;
+        border: 1.5px solid var(--paper-mid);
+        border-radius: 1.25rem;
+        padding: 0.85rem 1.2rem;
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        resize: vertical;
+        transition: all 0.2s;
+        line-height: 1.5;
+    }
+
+    .comment-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(196, 80, 26, 0.1);
+    }
+
+    .comment-form-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1rem;
+        gap: 0.8rem;
+    }
+
+    .comment-submit {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.6rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        font-size: 0.8rem;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: var(--sans);
+    }
+
+    .comment-submit:hover {
+        background: #a03f12;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(196, 80, 26, 0.2);
+    }
+
+    .comment-submit:active {
+        transform: translateY(0);
+    }
+
+    /* Login Prompt */
+    .comment-login-prompt {
+        text-align: center;
+        background: var(--paper-warm);
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        color: var(--ink-soft);
+        margin-bottom: 2rem;
+        border: 1px dashed var(--paper-mid);
+    }
+
+    .comment-login-prompt a {
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .comment-login-prompt a:hover {
+        text-decoration: underline;
+    }
+
+    /* Comments List */
+    .comments-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Individual Comment Card */
+    .comment-item {
+        display: flex;
+        gap: 1rem;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.4rem 1.6rem;
+        border: 1px solid var(--paper-mid);
+        transition: all 0.25s ease;
+    }
+
+    .comment-item:hover {
+        border-color: var(--accent-soft);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+        transform: translateY(-1px);
+    }
+
+    .comment-body-wrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+    }
+
+    .comment-body {
+        flex: 1;
+    }
+
+    .comment-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.7rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .comment-author {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--ink);
+        letter-spacing: -0.2px;
+    }
+
+    .comment-date {
+        font-size: 0.7rem;
+        color: var(--ink-muted);
+        letter-spacing: 0.01em;
+    }
+
+    .comment-text {
+        font-size: 0.93rem;
+        line-height: 1.6;
+        color: var(--ink-mid);
+        margin: 0.4rem 0 0.2rem;
+    }
+
+    /* Reply Toggle Button */
+    .reply-toggle-btn {
+        background: none;
+        border: none;
+        color: var(--ink-muted);
+        font-size: 0.75rem;
+        font-family: var(--sans);
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.5rem;
+        padding: 0.3rem 0.6rem;
+        transition: all 0.2s;
+        letter-spacing: 0.02em;
+        border-radius: 2rem;
+    }
+
+    .reply-toggle-btn i {
+        font-size: 0.7rem;
+        transition: transform 0.2s;
+    }
+
+    .reply-toggle-btn:hover {
+        color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    .reply-toggle-btn:hover i {
+        transform: translateX(2px);
+    }
+
+    /* Reply Form */
+    .reply-form {
+        background: var(--paper-warm);
+        border: 1px solid var(--paper-mid);
+        border-radius: 1.25rem;
+        padding: 1rem;
+        margin-left: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .reply-form .comment-form-top {
+        gap: 0.8rem;
+    }
+
+    /* Smaller avatar for replies */
+    .comment-avatar.sm {
+        width: 34px;
+        height: 34px;
+        font-size: 0.85rem;
+    }
+
+    /* Cancel Reply Button */
+    .cancel-reply-btn {
+        background: transparent;
+        border: 1px solid var(--paper-mid);
+        border-radius: 2rem;
+        padding: 0.45rem 1.2rem;
+        font-family: var(--sans);
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--ink-muted);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .cancel-reply-btn:hover {
+        border-color: var(--ink-muted);
+        color: var(--ink);
+        background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Replies List (Nested) */
+    .replies-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 0.5rem;
+        padding-left: 1rem;
+        border-left: 2px solid var(--paper-mid);
+        margin-left: 0.5rem;
+    }
+
+    .reply-item {
+        display: flex;
+        gap: 0.85rem;
+        align-items: flex-start;
+        background: var(--paper-warm);
+        border-radius: 1.25rem;
+        padding: 1rem 1.2rem;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+    }
+
+    .reply-item:hover {
+        border-color: var(--paper-mid);
+        background: white;
+    }
+
+    /* Reply Badge */
+    .reply-badge {
+        font-size: 0.65rem;
+        background: var(--accent-light, #f0e0d4);
+        padding: 2px 8px;
+        border-radius: 1.5rem;
+        color: var(--accent);
+        font-weight: 500;
+        letter-spacing: 0.01em;
+    }
+
+    /* Empty State */
+    .comment-empty {
+        text-align: center;
+        padding: 2.5rem;
+        background: var(--paper-warm);
+        border-radius: 1.5rem;
+        color: var(--ink-muted);
+        font-style: italic;
+        border: 1px dashed var(--paper-mid);
+    }
+
+    .comment-empty i {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+        opacity: 0.5;
+        display: block;
+    }
+
+    /* Add accent color variable if missing */
+    :root {
+        --accent-light: #f4e4da;
+    }
+
+    /* Responsive Adjustments for Comments */
+    @media (max-width: 680px) {
+        .comment-item {
+            flex-direction: column;
+            padding: 1.2rem;
+        }
+        
+        .comment-avatar {
+            align-self: flex-start;
+        }
+        
+        .replies-list {
+            padding-left: 0.5rem;
+            margin-left: 0;
+        }
+        
+        .reply-item {
+            flex-direction: column;
+            padding: 0.9rem;
+        }
+        
+        .comment-form {
+            padding: 1rem;
+        }
+        
+        .comment-form-top {
+            gap: 0.75rem;
+        }
+        
+        .comments-title {
+            font-size: 1.3rem;
+        }
+    }
+
+    /* Smooth animations for reply forms */
+    .reply-form {
+        animation: fadeSlideDown 0.25s ease;
+    }
+
+    @keyframes fadeSlideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Subtle divider between comments */
+    .comment-item:not(:last-child) {
+        border-bottom: 1px solid var(--paper-mid);
+        border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+    }
+
+
+
+
+
+
+
+
+/* Reply button */
+.reply-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--ink-muted);
+    font-size: 0.78rem;
+    font-family: var(--sans);
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.6rem;
+    padding: 0.3rem 0;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+}
+
+.reply-toggle-btn:hover {
+    color: var(--accent);
+}
+
+/* Cancel reply button */
+.cancel-reply-btn {
+    background: none;
+    border: 1px solid var(--paper-mid);
+    border-radius: 40px;
+    padding: 0.45rem 1rem;
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancel-reply-btn:hover {
+    border-color: var(--ink-muted);
+    color: var(--ink);
+}
+
+/* comment-body-wrap wraps the comment bubble + reply form + replies together */
+.comment-body-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* Reply form */
+.reply-form {
+    background: var(--paper-warm);
+    border: 1px solid var(--paper-mid);
+    border-radius: 14px;
+    padding: 1rem;
+    margin-left: 0.5rem;
+}
+
+/* Replies indented under parent */
+.replies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--paper-mid);
+    margin-left: 0.5rem;
+}
+
+.reply-item {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+}
+
+/* Smaller avatar for replies */
+.comment-avatar.sm {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+/* "replying to" badge */
+.reply-badge {
+    font-size: 0.72rem;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 1px 7px;
+    border-radius: 20px;
+    font-weight: 500;
+}
     </style>
 </head>
 <body>
@@ -530,33 +1121,126 @@
         </div>
 
         <!-- Navigation to Previous/Next Posts -->
-        {% if prev_post or next_post %}
-        <div class="post-navigation">
-            {% if prev_post %}
-            <a href="{% url 'post' prev_post.id %}" class="nav-post prev">
-                <div class="nav-label"><i class="fas fa-arrow-left"></i> Previous</div>
-                <div class="nav-title">{{ prev_post.title|truncatechars:50 }}</div>
-            </a>
-            {% else %}
-            <div class="nav-post prev" style="visibility: hidden;"></div>
+        {% if related_posts %}
+<div class="more-posts-section">
+    <div class="more-posts-label">More from Santa &amp; Tech</div>
+    <div class="more-posts-grid">
+        {% for rpost in related_posts %}
+        <a href="{% url 'post' rpost.id %}" class="more-post-card">
+            {% if rpost.image %}
+            <div class="more-post-img">
+                <img src="{{ rpost.image.url }}" alt="{{ rpost.title }}">
+            </div>
             {% endif %}
-            
-            {% if next_post %}
-            <a href="{% url 'post' next_post.id %}" class="nav-post next">
-                <div class="nav-label">Next <i class="fas fa-arrow-right"></i></div>
-                <div class="nav-title">{{ next_post.title|truncatechars:50 }}</div>
-            </a>
-            {% endif %}
-        </div>
-        {% endif %}
+            <div class="more-post-body">
+                <span class="more-post-tag">Article</span>
+                <div class="more-post-title">{{ rpost.title|truncatechars:65 }}</div>
+                <div class="more-post-meta">{{ rpost.created_at|date:"F j, Y" }}</div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 
         <div class="content-divider">∞</div>
 
         <!-- Comments Section -->
-        <div class="comments-wrapper">
-            <div id="disqus_thread"></div>
-            <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+       <div class="comments-wrapper">
+
+    <div class="comments-header">
+        <span class="comments-title">
+            <i class="fa-regular fa-comment"></i>
+            {{ comments|length }} Comment{{ post.comments.count|pluralize }}
+        </span>
+    </div>
+
+    <!-- New Comment Form -->
+    {% if user.is_authenticated %}
+    <form method="POST" class="comment-form">
+        {% csrf_token %}
+        <input type="hidden" name="parent_id" value="">
+        <div class="comment-form-top">
+            <div class="comment-avatar">{{ user.username|slice:":1"|upper }}</div>
+            <textarea name="content" class="comment-input" placeholder="Share your thoughts..." rows="3" required></textarea>
         </div>
+        <div class="comment-form-actions">
+            <button type="submit" class="comment-submit">Post Comment</button>
+        </div>
+    </form>
+    {% else %}
+    <div class="comment-login-prompt">
+        <i class="fa-regular fa-lock"></i>
+        <span>Please <a href="{% url 'login' %}">log in</a> to leave a comment.</span>
+    </div>
+    {% endif %}
+
+    <!-- Comments List -->
+    <div class="comments-list">
+        {% for comment in comments %}
+        <div class="comment-item" id="comment-{{ comment.id }}">
+
+            <!-- Parent Comment -->
+            <div class="comment-avatar">{{ comment.author.username|slice:":1"|upper }}</div>
+            <div class="comment-body-wrap">
+                <div class="comment-body">
+                    <div class="comment-meta">
+                        <span class="comment-author">{{ comment.author.username }}</span>
+                        <span class="comment-date">{{ comment.created_at|date:"F j, Y" }}</span>
+                    </div>
+                    <p class="comment-text">{{ comment.content }}</p>
+                    {% if user.is_authenticated %}
+                    <button class="reply-toggle-btn" onclick="toggleReplyForm({{comment.id }})">
+                        <i class="fa-regular fa-reply"></i> Reply
+                    </button>
+                    {% endif %}
+                </div>
+
+                <!-- Reply Form (hidden by default, shown when Reply is clicked) -->
+                {% if user.is_authenticated %}
+                <form method="POST" class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
+                    {% csrf_token %}
+                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                    <div class="comment-form-top">
+                        <div class="comment-avatar sm">{{ user.username|slice:":1"|upper }}</div>
+                        <textarea name="content" class="comment-input" placeholder="Reply to {{ comment.author.username }}..." rows="2" required></textarea>
+                    </div>
+                    <div class="comment-form-actions">
+                        <button type="button" class="cancel-reply-btn" onclick="toggleReplyForm({{comment.id}})">Cancel</button>
+                        <button type="submit" class="comment-submit">Post Reply</button>
+                    </div>
+                </form>
+                {% endif %}
+
+                <!-- Replies List -->
+             {% if comment.replies.exists %}
+                <div class="replies-list">
+                    {% for reply in comment.replies.all %}
+                    <div class="reply-item" id="comment-{{ reply.id }}">
+                        <div class="comment-avatar sm">{{ reply.author.username|slice:":1"|upper }}</div>
+                        <div class="comment-body">
+                            <div class="comment-meta">
+                                <span class="comment-author">{{ reply.author.username }}</span>
+                                <span class="reply-badge">replying to {{ comment.author.username }}</span>
+                                <span class="comment-date">{{ reply.created_at|date:"F j, Y" }}</span>
+                            </div>
+                            <p class="comment-text">{{ reply.content }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="comment-empty">
+            No comments yet. Be the first to share your thoughts!
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
 
     </div>
 
@@ -568,17 +1252,17 @@
 
     <script>
         // Disqus Configuration
-        var disqus_config = function () {
-            this.page.url = "{{ request.scheme }}://{{ request.get_host }}{{ request.path }}";
-            this.page.identifier = "blog-{{ post.id }}";
-        };
-        
-        (function() {
-            var d = document, s = d.createElement('script');
-            s.src = 'https://santatech.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
+  
+    var disqus_config = function () {
+        this.page.identifier = "post-{{ post.id }}"; 
+        /* Don't set this.page.url — let identifier be the sole key */
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://santatech.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
 
         // Share functionality
         (function() {
@@ -658,6 +1342,20 @@
                 });
             }
 
+
+
+                        // Toggle reply form open/closed when Reply button is clicked
+            function toggleReplyForm(commentId) {
+                const form = document.getElementById('reply-form-' + commentId);
+                if (!form) return;
+                const isHidden = form.style.display === 'none';
+                form.style.display = isHidden ? 'block' : 'none';
+                if (isHidden) {
+                    // Auto-focus the textarea when opening
+                    form.querySelector('textarea').focus();
+                }
+            }
+
             // Copy link button
             const copyBtn = document.getElementById('copyLinkBtn');
             if (copyBtn) {
@@ -668,6 +1366,6 @@
             }
         })();
     </script>
-    <script id="dsq-count-scr" src="//santatech.disqus.com/count.js" async></script>
+  
 </body>
 </html>

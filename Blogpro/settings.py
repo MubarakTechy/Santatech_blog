@@ -13,7 +13,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 SECRET_KEY = 'django-insecure-e6usa874ha$tl)#7visnzyyxcp2v13hevcyk^0yc37*26cci#@'
 DEBUG = True
-ALLOWED_HOSTS = []
 
 import cloudinary
 

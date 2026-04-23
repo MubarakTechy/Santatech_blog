@@ -1,4 +1,5 @@
 from unittest import loader
+import cloudinary
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
@@ -9,7 +10,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Post
 from .models import User
-
+import requests
+from django.utils.text import slugify
+import uuid
+from django.db.models import Q
 
 
 from django.shortcuts import render, get_object_or_404, redirect
@@ -18,16 +22,55 @@ from .models import Post, Comment
 
 # Create your views here.
 def Home(request):
-    posts = Post.objects.all()
-    return render(request, "Home.html", {"posts": posts})
+    # Order by created_at descending (newest first)
+    posts = Post.objects.all().order_by('-created_at')
+    
+    
+    # Fetch real news for carousel
+    news_articles = []
+    try:
+        api_key = '36f3605260a842eeab995d262daff1d8'  # paste your key here
+        url = f'https://newsapi.org/v2/top-headlines?language=en&pageSize=8&apiKey={api_key}'
+        response = requests.get(url, timeout=5)
+        data = response.json()
+
+        # Only keep articles that have both an image and a title
+        news_articles = [
+            article for article in data.get('articles', [])
+            if article.get('urlToImage') and article.get('title')
+        ][:8]  # max 8 slides
+
+    except Exception:
+        pass  # if API fails, carousel just shows nothing — won't crash the page
+
+    return render(request, 'Home.html', {
+        'posts': posts,
+        'news_articles': news_articles,
+    })
 
 
-def post(request, id):
-  post = Post.objects.get(id=id)
-  post.views += 1
-  post.save()
-  return render(request, 'SinglePost.html', {'post': post})
+def post(request, slug):
+    post = get_object_or_404(Post, slug=slug)
 
+    if request.method == "POST":
+        content = request.POST.get("content")
+        parent_id = request.POST.get("parent_id")
+
+        Comment.objects.create(
+            post=post,
+            author=request.user,
+            content=content,
+            parent_id=parent_id if parent_id else None
+        )
+
+        return redirect(request.path)  # 🔥 important refresh
+
+    comments = post.comments.filter(parent__isnull=True).order_by("-created_at")
+
+    return render(request, "SinglePost.html", {
+        "post": post,
+        "comments": comments
+    })
 
 
 # Signup
@@ -82,16 +125,21 @@ def create_post_view(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        image = request.FILES.get('image')
+        image = request.FILES.get('image') 
+
+        postSlug = slugify(title) + "-" + str(uuid.uuid4())[:6]
+
         Post.objects.create(
             title=title,
             content=content,
-            image=image,
+            image=image,  # ✅ pass file directly
+            slug=postSlug,
             author=request.user
         )
-        return redirect('dashboard')
-    return render(request, 'dashboard/create.html')
 
+        return redirect('dashboard')
+
+    return render(request, 'dashboard/create.html')
 @login_required(login_url='login')
 def my_posts_view(request):
     posts = Post.objects.filter(author=request.user).order_by('-created_at')
@@ -123,7 +171,11 @@ def edit_post_view(request, id):
         post.title = request.POST.get('title')
         post.content = request.POST.get('content')
         if request.FILES.get('image'):
-            post.image = request.FILES.get('image')
+            try:
+                upload_result = cloudinary.uploader.upload(request.FILES['image'])
+                post.image = upload_result.get('secure_url')
+            except Exception as e:
+                print("Cloudinary error:", e)
         post.save()
         return redirect('dashboard')
     return render(request, 'dashboard/edit.html', {'post': post})
@@ -131,8 +183,8 @@ def edit_post_view(request, id):
 
 #comments
 
-def post_detail(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+def post_detail(request, slug):
+    post = get_object_or_404(Post, slug=slug)
     post.views += 1
     post.save()
 
@@ -166,4 +218,4 @@ def add_comment(request, post_id):
                 parent=parent
             )
 
-    return redirect('post', post_id=post_id)
+    return redirect('post', slug=post.slug)

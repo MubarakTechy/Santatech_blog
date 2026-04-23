@@ -1,13 +1,12 @@
 from django.db import models
+from django.utils.text import slugify
+
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
     BaseUserManager
 )
 from cloudinary.models import CloudinaryField
-from .models import Post, Comment
-from django.shortcuts import render, get_object_or_404, redirect
-
 
 # 🔥 Custom Manager
 class CustomUserManager(BaseUserManager):
@@ -75,6 +74,13 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     views = models.PositiveIntegerField(default=0)
+    slug = models.SlugField(max_length=200, unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            import uuid
+            self.slug = slugify(self.title) + "-" + str(uuid.uuid4())[:6]
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} by {self.author.username}"
@@ -99,17 +105,3 @@ class Comment(models.Model):
     def __str__(self):
         return f"Comment by {self.author.username} on {self.post.title}"
 
-
-   
-
-def post_detail(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    prev_post = Post.objects.filter(id__lt=post_id).order_by('-id').first()
-    next_post = Post.objects.filter(id__gt=post_id).order_by('id').first()
-    
-    context = {
-        'post': post,
-        'prev_post': prev_post,
-        'next_post': next_post,
-    }
-    return render(request, 'post_detail.html', context)

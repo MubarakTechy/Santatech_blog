@@ -874,91 +874,37 @@ body {
   <!-- FEATURED CAROUSEL -->
   <div class="featured-carousel">
 
-    <div class="featured-card active">
-      <img src="{% static 'images/san-francisco-cityscape (2).jpg' %}" alt="San Francisco">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>Design in the age of AI: How to adapt lazily.</h1>
-      </div>
+  {% for article in news_articles %}
+  <div class="featured-card {% if forloop.first %}active{% endif %}">
+    <img src="{{ article.urlToImage }}" alt="{{ article.title }}">
+    <div class="featured-content">
+      <span class="badge">
+        <i class="fas fa-newspaper"></i> {{ article.source.name }}
+      </span>
+      <h1>{{ article.title }}</h1>
+      <a href="{{ article.url }}" target="_blank" class="carousel-read-btn">
+        Read Full Story <i class="fas fa-arrow-right"></i>
+      </a>
     </div>
-
-    <div class="featured-card">
-      <img src="{% static 'images/london-cityscape.jpg' %}" alt="London">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>The future of creative writing in a digital world.</h1>
-      </div>
-    </div>
-
-    <div class="featured-card">
-      <img src="{% static 'images/tokyo-cityscape.jpg' %}" alt="Tokyo">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>Minimalism meets technology: Finding balance.</h1>
-      </div>
-    </div>
-
-    <div class="featured-card">
-      <img src="{% static 'images/paris-cityscape.jpg' %}" alt="Paris">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>Why stories matter more than ever in 2025.</h1>
-      </div>
-    </div>
-
-    <div class="featured-card">
-      <img src="{% static 'images/dubai-cityscape.jpg' %}" alt="Dubai">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>The art of slow reading in a fast-paced world.</h1>
-      </div>
-    </div>
-
-    <div class="featured-card">
-      <img src="{% static 'images/singapore-cityscape.jpg' %}" alt="Singapore">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>How cities inspire creativity and innovation.</h1>
-      </div>
-    </div>
-
-    <div class="featured-card">
-      <img src="{% static 'images/sydney-cityscape.jpg' %}" alt="Sydney">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>Digital detox: Reclaiming your attention span.</h1>
-      </div>
-    </div>
-
-    <div class="featured-card">
-      <img src="{% static 'images/san-francisco-cityscape.jpg' %}" alt="San Francisco">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>The rise of indie publishing and self-expression.</h1>
-      </div>
-    </div>
-
-    <div class="featured-card">
-      <img src="{% static 'images/chicago-cityscape.jpg' %}" alt="Chicago">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>Writing tips from legendary authors you need.</h1>
-      </div>
-    </div>
-
-    <div class="featured-card">
-      <img src="{% static 'images/seoul-cityscape.jpg' %}" alt="Seoul">
-      <div class="featured-content">
-        <span class="badge"><i class="fas fa-star"></i> Featured</span>
-        <h1>Building a creative routine that actually works.</h1>
-      </div>
-    </div>
-
-    <button class="carousel-btn prev" onclick="changeSlide(-1)" aria-label="Previous">&#8249;</button>
-    <button class="carousel-btn next" onclick="changeSlide(1)" aria-label="Next">&#8250;</button>
-    <div class="carousel-dots" id="carouselDots"></div>
   </div>
+  {% empty %}
+  <!-- Fallback if API fails -->
+  <!-- <div class="featured-card active">
+    <img src="{% static 'images/san-francisco-cityscape.jpg' %}" alt="Fallback">
+    <div class="featured-content">
+      <span class="badge"><i class="fas fa-star"></i> Featured</span>
+      <h1>Welcome to Echo & Ink — stories that matter.</h1>
+    </div>
+  </div>
+  {% endfor %} -->
 
+  <button class="carousel-btn prev" onclick="changeSlide(-1)">&#8249;</button>
+  <button class="carousel-btn next" onclick="changeSlide(1)">&#8250;</button>
+  <div class="carousel-dots" id="carouselDots"></div>
+</div>
+
+   
+<!-- 36f3605260a842eeab995d262daff1d8 -->
   <!-- MAIN LAYOUT -->
   <div class="layout">
 
@@ -990,11 +936,11 @@ body {
               <span><i class="far fa-eye"></i> {{ post.views }}</span>
             </div>
 
-            <h3><a href="{% url 'post' post.id %}">{{ post.title }}</a></h3>
+            <h3><a href="{% url 'post' post.slug %}">{{ post.title }}</a></h3>
 
             <p class="card-excerpt">{{ post.content|truncatewords:20|safe }}</p>
 
-            <a class="read-link" href="{% url 'post' post.id %}">
+            <a class="read-link" href="{% url 'post' post.slug %}">
               Read more <i class="fas fa-arrow-right"></i>
             </a>
           </div>
