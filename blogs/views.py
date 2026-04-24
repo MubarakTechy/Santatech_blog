@@ -25,7 +25,6 @@ def Home(request):
     # Order by created_at descending (newest first)
     posts = Post.objects.all().order_by('-created_at')
     
-    
     # Fetch real news for carousel
     news_articles = []
     try:
@@ -45,12 +44,20 @@ def Home(request):
 
     return render(request, 'Home.html', {
         'posts': posts,
-        'news_articles': news_articles,
+        'news_articles': news_articles
     })
 
+from decimal import Decimal
 
 def post(request, slug):
     post = get_object_or_404(Post, slug=slug)
+    post.views += 1
+
+    if post.views % 1000 == 0:
+        post.author.earnings += Decimal('1.00')
+        post.author.save()
+        
+    post.save()
 
     if request.method == "POST":
         content = request.POST.get("content")
@@ -149,7 +156,9 @@ def my_posts_view(request):
 
 @login_required(login_url='login')
 def profile_view(request):
-    return render(request, 'dashboard/profile.html')
+    
+    user_posts = Post.objects.filter(author=request.user).order_by('-created_at')
+    return render(request, 'dashboard/profile.html', {'user_posts': user_posts, 'user_earnings': request.user.earnings})
 
 #profile image upload
 @login_required(login_url='login')
@@ -186,6 +195,11 @@ def edit_post_view(request, id):
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
     post.views += 1
+
+    if post.views % 1000 == 0:
+        post.author.earnings += 1.00
+        post.author.save()
+        
     post.save()
 
     # Only top-level comments (no parent)

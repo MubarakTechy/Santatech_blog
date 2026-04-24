@@ -43,6 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
+    earnings = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     userType = models.CharField(
         max_length=10,
@@ -68,13 +69,27 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 # Blog Post Model
 class Post(models.Model):
+
+    class Category(models.TextChoices):
+        NEWS = 'news', 'News'
+        EDUCATION = 'education', 'Education'
+        MAKEMONEY = 'makemoney', 'Makemoney'
+        DIGITAL = 'digital', 'Digital'
+        TECHNOLOGY = 'technology', 'Technology'
+
     title = models.CharField(max_length=200)
     content = models.TextField()
     image = CloudinaryField('image', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    # comments =models.ForeignKey(Comment, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     views = models.PositiveIntegerField(default=0)
     slug = models.SlugField(max_length=200, unique=True)
+    category = models.CharField(
+        max_length=15,
+        choices=Category.choices,
+        default=Category.TECHNOLOGY
+    )
 
     def save(self, *args, **kwargs):
         if not self.slug:

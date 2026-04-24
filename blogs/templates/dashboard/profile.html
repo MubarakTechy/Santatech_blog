@@ -642,15 +642,15 @@
         <div class="stats-row">
             <div class="stat-card">
                 <div class="stat-label">Total Posts</div>
-                <div class="stat-value">{{ posts|length }}</div>
+                <div class="stat-value">{{ user_posts|length }}</div>
                 <div class="stat-sub">published articles</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Latest Activity</div>
+                <div class="stat-label">Your Earnings</div>
                 <div class="stat-value" style="font-size:1.2rem;">
-                    {% if posts %}{{ posts.0.created_at|date:"M j, Y" }}{% else %}—{% endif %}
+                    ${{ user_earnings|floatformat:2 }}
                 </div>
-                <div class="stat-sub">most recent post</div>
+                <div class="stat-sub">total earnings</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Member Since</div>

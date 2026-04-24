@@ -933,6 +933,7 @@ body {
               <span class="post-category">{{ post.category }}</span>
               <span><i class="far fa-calendar-alt"></i> {{ post.created_at|date:"M d, Y" }}</span>
               <span><i class="far fa-user"></i> {{ post.author.username }}</span>
+              <span><i class="far fa-comments"></i> {{ post.comments.count }}</span>
               <span><i class="far fa-eye"></i> {{ post.views }}</span>
             </div>
 
