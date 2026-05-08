@@ -233,3 +233,12 @@ def add_comment(request, post_id):
             )
 
     return redirect('post', slug=post.slug)
+
+
+def category_posts(request, category):
+    posts = Post.objects.filter(category__iexact=category).order_by('-created_at')
+
+    return render(request, 'category.html', {
+        'posts': posts,
+        'category': category
+    })

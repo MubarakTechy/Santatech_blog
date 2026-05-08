@@ -1,0 +1,56 @@
+{% extends 'home.html' %}
+
+{% block content %}
+
+<div class="container">
+
+  <h2 class="section-title">
+    {{ category }} Posts
+  </h2>
+
+  <div class="posts-grid">
+
+    {% for post in posts %}
+    <article class="post-card">
+
+      {% if post.image %}
+      <div class="card-img-wrap">
+        <img src="{{ post.image.url }}" alt="{{ post.title }}">
+      </div>
+      {% endif %}
+
+      <div class="card-content">
+
+        <div class="post-meta">
+          <span class="post-category">
+            {{ post.category }}
+          </span>
+        </div>
+
+        <h3>
+          <a href="{% url 'post' post.slug %}">
+            {{ post.title }}
+          </a>
+        </h3>
+
+        <p class="card-excerpt">
+          {{ post.content|truncatewords:20|safe }}
+        </p>
+
+      </div>
+
+    </article>
+
+    {% empty %}
+
+    <div class="empty-state">
+      <p>No posts in this category yet.</p>
+    </div>
+
+    {% endfor %}
+
+  </div>
+
+</div>
+
+{% endblock %}

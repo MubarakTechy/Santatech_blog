@@ -20,4 +20,5 @@ urlpatterns = [
     # path('post/<slug:slug>/', views.post_detail, name='post'),
     path('post/<slug:slug>/comment/', views.add_comment, name='add_comment' ),
     path('post/<slug:slug>/', views.post, name='post'),
+    path('category/<str:category>/', views.category_posts, name='category_posts'),
 ]

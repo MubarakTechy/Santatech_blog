@@ -765,6 +765,16 @@ body {
 @media (max-width: 400px) {
   .featured-carousel { aspect-ratio: 1 / 1; }
 }
+
+
+.topic-list li a{
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
 </style>
 </head>
 
@@ -969,13 +979,44 @@ body {
 
       <div class="sidebar-widget">
         <h3><i class="fas fa-hashtag"></i> Topics</h3>
-        <ul class="topic-list">
-          <li><i class="fas fa-microchip"></i> Digital Minimalism</li>
-          <li><i class="fas fa-robot"></i> Technology</li>
-          <li><i class="fas fa-pen-fancy"></i> Writing & Creativity</li>
-          <li><i class="fas fa-brain"></i> Future Thinking</li>
-          <li><i class="fas fa-city"></i> Culture & Society</li>
-        </ul>
+       <ul class="topic-list">
+
+  <li>
+    <a href="{% url 'category_posts' 'Digital' %}">
+      <i class="fas fa-microchip"></i>
+      Digital Minimalism
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'category_posts' 'Technology' %}">
+      <i class="fas fa-robot"></i>
+      Technology
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'category_posts' 'Makemoney ' %}">
+      <i class="fas fa-pen-fancy"></i>
+      Makemoney 
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'category_posts' 'New' %}">
+      <i class="fas fa-brain"></i>
+      News
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'category_posts' 'Education ' %}">
+      <i class="fas fa-city"></i>
+      Education
+    </a>
+  </li>
+
+</ul>
       </div>
 
       <div class="sidebar-widget">
